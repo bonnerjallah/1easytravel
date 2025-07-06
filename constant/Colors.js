@@ -1,0 +1,43 @@
+export const Colors = {
+  light: {
+    background: '#FFFFFF',
+    primary: '#0057FF',
+    secondary: '#4a4e69',
+    accent: '#FFCD00',
+    danger: '#FF4D4D',
+    success: '#1BC47D',
+    title: '#111111',
+    text: 'black',
+    subtext: '#6E6E73',
+    border: '#E5E5EA',
+    disabled: '#BEBEC2',
+    mapMarker: '#FF6B00',
+    button: "#000000",
+    buttontitle: "#FFFFFF",
+    placeholder: '#999',
+    tabIconColor: "#000000",
+    iconColorFocused: "#000000",
+    inputBackground: "#F0F0F0" // 👈 added this line
+  },
+
+  dark: {
+    background: '#1C1C1E',
+    primary: '#3399FF',
+    secondary: '#2C2C2E',
+    accent: '#FFCD00',
+    danger: '#FF453A',
+    success: '#30D158',
+    title: '#FFFFFF',
+    text: 'white',
+    inputText: "black",
+    subtext: '#8E8E93',
+    border: '#3A3A3C',
+    disabled: '#5C5C5E',
+    mapMarker: '#FF6B00',
+    button: "#FFFFFF",
+    placeholder: '#666',
+    tabIconColor: "#6c757d",
+    iconColorFocused: "#FFFFFF",
+    inputBackground: "#2C2C2E" // 👈 added this line
+  },
+};

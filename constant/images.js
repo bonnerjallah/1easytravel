@@ -1,0 +1,33 @@
+// constants/images.js or assets/images.js
+
+const images = {
+  blurCar: require('../assets/images/blur_car.png'),
+  bowl: require('../assets/images/bowl.png'),
+  callProfile1: require('../assets/images/call_profile1.png'),
+  callProfile2: require('../assets/images/call_profile2.png'),
+  carOnboard1: require('../assets/images/car_onboard_1.png'),
+  carOnboard2: require('../assets/images/car_onboard_2.png'),
+  carOnboard3: require('../assets/images/car_onboard_3.png'),
+  carrental: require('../assets/images/carrental.png'),
+  food: require('../assets/images/food.png'),
+  locationImage: require('../assets/images/location_image.dart.png'),
+  login: require('../assets/images/login.png'),
+  logo: require('../assets/images/logo.png'),
+  mainProfile: require('../assets/images/main_profileimage.png'),
+  map: require('../assets/images/map.png'),
+  onboard0: require('../assets/images/onboard0.png'),
+  onboard1: require('../assets/images/onboard1.png'),
+  onboard2: require('../assets/images/onboard2.png'),
+  pkgBox: require('../assets/images/pkgBox.png'),
+  profileImage1: require('../assets/images/profile_image1.png'),
+  profileImage2: require('../assets/images/profile_image2.png'),
+  profileImage3: require('../assets/images/profile_image3.png'),
+  profileImage4: require('../assets/images/profile_image4.png'),
+  rectangleProfile: require('../assets/images/rectangle_profile.png'),
+  reviewProfile: require('../assets/images/review_profile.png'),
+  tripScreenIcon: require('../assets/images/trip_screen_icon.png'),
+  userCallProfile: require('../assets/images/user_call_profile.png'),
+  verticalMap: require('../assets/images/vertical_map.png'),
+};
+
+export default images;
