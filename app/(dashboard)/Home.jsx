@@ -1,16 +1,32 @@
-import { StyleSheet } from 'react-native';
-import { useEffect } from 'react';
+import { Image, StyleSheet, TouchableOpacity, useColorScheme, View } from 'react-native';
+import { useEffect, useState } from 'react';
 import * as Location from 'expo-location';
 
+// UI
 import { Colors } from "../../constant/Colors";
 import ThemedView from "../components/ThemedView";
 import ThemedText from "../components/ThemedText";
+import icons from "../../constant/icons" 
+import images from '../../constant/images';
 
+// State Management
 import { useSetAtom } from 'jotai';
 import { userLocationAtom } from '../../atoms/locationAtoms';
+import Spacer from '../components/Spacer';
+
+// SubComponents
+import Rides from '../components/Rides';
+import Eats from '../components/Eats';
+
+
 
 const Home = () => {
+
   const setLocation = useSetAtom(userLocationAtom);
+  const [showEats, setShowEats] = useState(false)
+
+  const colorScheme = useColorScheme()
+  const themed = Colors[colorScheme] ?? Colors.light
 
   useEffect(() => {
     (async () => {
@@ -39,9 +55,32 @@ const Home = () => {
     })();
   }, []);
 
+
   return (
     <ThemedView style={styles.container} safe={true}>
-      <ThemedText>Home</ThemedText>
+      <Spacer height={20}/>
+
+      {/* TOGGLE BUTTON */}
+      <View style= {styles.headerManuContainer}> 
+        <TouchableOpacity 
+          style={[styles.screenSelect, !showEats && styles.activeTab]}
+          onPress={() => setShowEats(false)}
+        >
+          <Image source={icons.car} />
+          <ThemedText  variant='title' title>Rides</ThemedText>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={[styles.screenSelect, showEats && styles.activeTab]}
+          onPress={() => setShowEats(true)}        
+        >
+          <Image source={images.food} />
+          <ThemedText variant='title' title>Eats</ThemedText>
+        </TouchableOpacity>
+      </View>
+
+      {/* SUB COMPONENTS */}
+      {showEats ? <Eats /> : <Rides />  }
+      
     </ThemedView>
   );
 };
@@ -52,4 +91,23 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  headerManuContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    columnGap: "5"
+  },
+  screenSelect: {
+    flexDirection: "row",
+    columnGap: 5,
+    alignItems: "center",
+    borderBottomWidth: 2,
+    borderBottomColor: 'lightgray',
+    width: "50%",
+    height: 50,
+    justifyContent: "center",
+  },
+  activeTab: {
+    borderBottomColor: 'black',
+  }
 });

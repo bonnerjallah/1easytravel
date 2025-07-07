@@ -17,7 +17,7 @@ import { useSetAtom } from 'jotai'
 import { userLocationAtom } from '../../atoms/locationAtoms';
 
 const GetLocation = () => {
-ls
+
     const setLocation = useSetAtom(userLocationAtom);
 
     const colorScheme = useColorScheme()

@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react"
 import { Redirect } from "expo-router"
 import AsyncStorage from "@react-native-async-storage/async-storage"
+
+//firebase
 import { onAuthStateChanged } from "firebase/auth"
 import { auth } from "../firebaseConfig"
+
+//state management
 import { useSetAtom } from "jotai"
 import { userAtoms } from "../atoms/userAtoms"
 
