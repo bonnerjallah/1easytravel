@@ -5,7 +5,6 @@ import Modal from 'react-native-modal'
 import ThemedText from './ThemedText'
 import { Colors } from '../../constant/Colors'
 import BackButton from './Backbutton'
-import { Ionicons } from '@expo/vector-icons'
 import Spacer from './Spacer'
 
 const WhereToModal = ({ isVisible, onClose }) => {
@@ -33,10 +32,6 @@ const WhereToModal = ({ isVisible, onClose }) => {
         </View>
 
       </View>
-
-      
-
-
 
     </Modal>
   )

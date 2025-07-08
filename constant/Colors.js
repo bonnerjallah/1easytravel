@@ -17,7 +17,8 @@ export const Colors = {
     placeholder: '#999',
     tabIconColor: "#000000",
     iconColorFocused: "#000000",
-    inputBackground: "#F0F0F0" // 👈 added this line
+    inputBackground: "#F0F0F0",
+    cardBackGround: "#dee2e6"
   },
 
   dark: {
@@ -38,6 +39,7 @@ export const Colors = {
     placeholder: '#666',
     tabIconColor: "#6c757d",
     iconColorFocused: "#FFFFFF",
-    inputBackground: "#2C2C2E" // 👈 added this line
+    inputBackground: "#2C2C2E",
+    cardBackGround: "#6c757d"
   },
 };

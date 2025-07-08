@@ -12,14 +12,14 @@ import { Colors } from '../../constant/Colors'
 //Components
 import PreviousRides from './PreviousRides'
 import Suggestions from './Suggestions'
+import Restaurants from "./Restaurants"
 
 
-const Rides = () => {
+const Rides = ({setShowEats, setShowRestaurentModal}) => {
 
   const colorScheme = useColorScheme();
   const themed = Colors[colorScheme] ?? Colors.light
 
-  const [showWheretoModal, setShowWhereModal] = useState(false)
 
 
   return (
@@ -43,7 +43,7 @@ const Rides = () => {
           name='search'
           size={35}
         />
-        <ThemedText variant='subtitle' style={{fontSize:25}}>Where to?</ThemedText>
+        <ThemedText variant='title' title = {true} style={{fontSize:25}}>Where to?</ThemedText>
       </Pressable>
 
       <Spacer height={30}/>
@@ -55,6 +55,10 @@ const Rides = () => {
       <Spacer height={20} />
 
       <Suggestions />
+
+      <Spacer height={20} />
+
+      <Restaurants  setShowEats={setShowEats} setShowRestaurentModal={setShowRestaurentModal}/>
 
 
     </ScrollView>

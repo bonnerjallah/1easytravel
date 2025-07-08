@@ -28,6 +28,16 @@ const images = {
   tripScreenIcon: require('../assets/images/trip_screen_icon.png'),
   userCallProfile: require('../assets/images/user_call_profile.png'),
   verticalMap: require('../assets/images/vertical_map.png'),
+  rentalKeys: require('../assets/images/rental_keys.png'),
+  grocery: require("../assets/images/grocery.png"),
+  meds1: require("../assets/images/meds1.png"),
+  meds2: require("../assets/images/meds2.png"),
+  calabash: require("../assets/rastaurantImage/calabash.jpg"),
+  diana: require("../assets/rastaurantImage/dianaRestaurant.jpg"),
+  eatery: require("../assets/rastaurantImage/eateryRestaurant.jpg"),
+  evelyns: require("../assets/rastaurantImage/evelyns.jpg"),
+  fuzion: require("../assets/rastaurantImage/fuzion.jpg")
+
 };
 
 export default images;

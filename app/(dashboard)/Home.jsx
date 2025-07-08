@@ -20,7 +20,7 @@ import Eats from '../components/Eats';
 
 
 
-const Home = () => {
+const Home = ({}) => {
 
   const setLocation = useSetAtom(userLocationAtom);
   const [showEats, setShowEats] = useState(false)
@@ -79,7 +79,7 @@ const Home = () => {
       </View>
 
       {/* SUB COMPONENTS */}
-      {showEats ? <Eats /> : <Rides />  }
+      {showEats ? <Eats /> : <Rides setShowEats={setShowEats} />}
       
     </ThemedView>
   );
