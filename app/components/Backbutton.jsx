@@ -1,16 +1,19 @@
 import { Ionicons } from '@expo/vector-icons';
-import { TouchableOpacity } from 'react-native';
-import { useRouter } from 'expo-router';
+import { TouchableOpacity, useColorScheme } from 'react-native';
+import { router } from 'expo-router';
+import { Colors } from '../../constant/Colors';
 
 const BackButton = ({ style, color = "#000", size = 25 }) => {
-  const router = useRouter();
+
+  const colorScheme = useColorScheme()
+  const themed = Colors[colorScheme] ?? Colors.light
 
   return (
     <TouchableOpacity onPress={() => router.back()} style={style}>
       <Ionicons 
         name='arrow-back' 
         size={size} 
-        color={color} 
+        color={themed.button} 
       />
     </TouchableOpacity>
   );

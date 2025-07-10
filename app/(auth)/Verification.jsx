@@ -1,19 +1,9 @@
 import { useEffect, useState } from "react";
-import {
-  Keyboard,
-  StyleSheet,
-  TouchableWithoutFeedback,
-  useColorScheme,
-  View,
-  Text,
-} from "react-native";
+import { Keyboard, StyleSheet, TouchableWithoutFeedback, useColorScheme, Text } from "react-native";
 import { router } from "expo-router";
 
 // Firebase
-import {
-  createUserWithEmailAndPassword,
-  sendEmailVerification,
-} from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { auth, db } from "../../firebaseConfig";
 
@@ -62,8 +52,8 @@ const Verification = () => {
       });
 
       setEmailSent(true);
+
     } catch (error) {
-      console.error("Registration error:", error);
       const messages = {
         "auth/email-already-in-use": "Email already in use.",
         "auth/invalid-email": "Invalid email address.",

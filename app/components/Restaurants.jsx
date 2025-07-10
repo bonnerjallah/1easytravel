@@ -19,6 +19,7 @@ const Restaurants = ({ setShowEats }) => {
   const [showRestaurentModal, setShowRestaurentModal] = useState(false); 
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
 
+  //MOCKUP DATA MAKE SURE TO REMOVE AND FETCH DATA FROM DATABASE
   const restaurents = [
     { title: "De' Calabash", foodType: "Loacal Cuisine - American", distance:"2.1 mi", image: images.calabash },
     { title: "Evelyn's Cuisine", foodType: "American", distance:"0.8 mi", image: images.evelyns },

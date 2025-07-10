@@ -1,5 +1,7 @@
-import { Tabs } from "expo-router";
+import { Tabs, Redirect } from "expo-router";
 import { useColorScheme } from "react-native";
+import {useAtom} from "jotai"
+import {userAtoms} from "../../atoms/userAtoms"
 
 
 import { Ionicons } from "@expo/vector-icons";
@@ -7,8 +9,17 @@ import { Colors } from "../../constant/Colors";
 
 export default () => {
 
+    // const [user] = useAtom(userAtoms);
     const colorScheme = useColorScheme()
     const themed = Colors[colorScheme] ?? Colors.light
+
+
+    // // 🔐 Redirect unauthenticated users
+    // if (!user) {
+    //     return <Redirect href="/(auth)/Login" />;
+    // }
+
+
 
     return (
         <Tabs
