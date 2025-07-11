@@ -1,15 +1,24 @@
+import {
+  FIREBASE_API_KEY,
+  FIREBASE_AUTH_DOMAIN,
+  FIREBASE_PROJECT_ID,
+  FIREBASE_STORAGE_BUCKET,
+  FIREBASE_MESSAGING_SENDER_ID,
+  FIREBASE_APP_ID
+} from '@env';
+
 import { initializeApp } from "firebase/app";
 import { initializeAuth, getReactNativePersistence, } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage"; 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAyI6MVoN5tCjwM17yPykuyRdk4cjQXn5A",
-  authDomain: "easytravel-f3a2d.firebaseapp.com",
-  projectId: "easytravel-f3a2d",
-  storageBucket: "easytravel-f3a2d.firebasestorage.app",
-  messagingSenderId: "1093914501803",
-  appId: "1:1093914501803:web:62af935ac8d0ce379c0dee",
+  apiKey: FIREBASE_API_KEY,
+  authDomain: FIREBASE_AUTH_DOMAIN,
+  projectId: FIREBASE_PROJECT_ID,
+  storageBucket: FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: FIREBASE_MESSAGING_SENDER_ID,
+  appId: FIREBASE_APP_ID,
 };
 
 // Initialize Firebase
