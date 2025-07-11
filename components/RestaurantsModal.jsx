@@ -1,12 +1,11 @@
 import { StyleSheet, Text, View, TouchableOpacity, Modal, Image, useColorScheme } from 'react-native';
 
-import images from '../../constant/images';
 
 //UI
 import ThemedText from './ThemedText'
 import Spacer from "../components/Spacer"
 import { Ionicons } from '@expo/vector-icons'
-import { Colors } from '../../constant/Colors'
+import { Colors } from '../constant/Colors'
 import ThemedButton from "./ThemedButton"
 
 

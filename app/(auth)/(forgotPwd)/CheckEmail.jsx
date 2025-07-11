@@ -1,7 +1,7 @@
 // app/(auth)/forgotPwd/CheckEmail.jsx
 
 import { View, Text, StyleSheet } from "react-native";
-import ThemedButton from "../../components/ThemedButton";
+import ThemedButton from "../../../components/ThemedButton";
 import { router } from "expo-router";
 
 const CheckEmail = () => {

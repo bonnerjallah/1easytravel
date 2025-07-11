@@ -1,5 +1,5 @@
 import { StyleSheet, Pressable, useColorScheme, Text } from 'react-native';
-import { Colors } from '../../constant/Colors';
+import { Colors } from '../constant/Colors';
 
 const ThemedButton = ({ style = {}, title, children, ...props }) => {
   const colorScheme = useColorScheme();

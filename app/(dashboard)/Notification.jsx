@@ -3,9 +3,9 @@ import { format } from 'date-fns'
 import { Ionicons } from '@expo/vector-icons'
 
 // UI
-import ThemedView from '../components/ThemedView'
-import ThemedText from '../components/ThemedText'
-import Spacer from '../components/Spacer'
+import ThemedView from '../../components/ThemedView'
+import ThemedText from '../../components/ThemedText'
+import Spacer from '../../components/Spacer'
 import { Colors } from '../../constant/Colors'
 
 // Sample Notifications

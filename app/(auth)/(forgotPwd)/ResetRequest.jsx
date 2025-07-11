@@ -1,15 +1,20 @@
 import { useState } from "react";
-import { View, Text, StyleSheet, Alert, useColorScheme } from "react-native";
-import { sendPasswordResetEmail } from "firebase/auth";
-import { auth } from "../../../firebaseConfig";
-import ThemedTextInput from "../../components/ThemedTextInput";
-import ThemedButton from "../../components/ThemedButton";
-import Spacer from "../../components/Spacer";
+import { StyleSheet, Alert, useColorScheme } from "react-native";
 import { router } from "expo-router";
 
+
+//Firebase
+import { sendPasswordResetEmail } from "firebase/auth";
+import { auth } from "../../../firebaseConfig";
+
+
+//UI
 import { Colors } from "../../../constant/Colors";
-import ThemedView from "../../components/ThemedView";
-import ThemedText from "../../components/ThemedText";
+import ThemedView from "../../../components/ThemedView";
+import ThemedText from "../../../components/ThemedText";
+import ThemedTextInput from "../../../components/ThemedTextInput";
+import ThemedButton from "../../../components/ThemedButton";
+import Spacer from "../../../components/Spacer";
 
 const ResetRequest = () => {
 

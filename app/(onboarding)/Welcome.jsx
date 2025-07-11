@@ -7,11 +7,10 @@
 
 
   import { Onboarding } from '../../constant/index';
-  import ThemedView from '../components/ThemedView';
-  import ThemedText from '../components/ThemedText';
-  import Spacer from '../components/Spacer';
-  import { Ionicons } from '@expo/vector-icons';
-  import ThemedButton from '../components/ThemedButton';
+  import ThemedView from '../../components/ThemedView';
+  import ThemedText from '../../components/ThemedText';
+  import Spacer from '../../components/Spacer';
+  import ThemedButton from '../../components/ThemedButton';
 
   const { width, height } = Dimensions.get('window');
 

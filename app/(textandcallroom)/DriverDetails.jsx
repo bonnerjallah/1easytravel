@@ -4,11 +4,11 @@ import { router } from 'expo-router'
 
 
 //UI
-import ThemedView from '../components/ThemedView'
-import ThemedText from '../components/ThemedText'
-import ThemedTextInput from '../components/ThemedTextInput'
-import Spacer from '../components/Spacer'
-import Backbutton from "../components/Backbutton"
+import ThemedView from '../../components/ThemedView'
+import ThemedText from '../../components/ThemedText'
+import ThemedTextInput from '../../components/ThemedTextInput'
+import Spacer from '../../components/Spacer'
+import Backbutton from "../../components/Backbutton"
 import { Ionicons } from '@expo/vector-icons'
 import { Colors } from '../../constant/Colors'
 import images from '../../constant/images'

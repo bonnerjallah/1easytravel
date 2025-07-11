@@ -2,10 +2,10 @@ import { StyleSheet, Image, View, useColorScheme, ImageBackground } from 'react-
 import * as Location from 'expo-location';
 
 
-import ThemedView from '../components/ThemedView'
-import ThemedText from '../components/ThemedText'
-import Spacer from '../components/Spacer'
-import ThemedButton from '../components/ThemedButton'
+import ThemedView from '../../components/ThemedView'
+import ThemedText from '../../components/ThemedText'
+import Spacer from '../../components/Spacer'
+import ThemedButton from '../../components/ThemedButton'
 import { Colors } from '../../constant/Colors'
 
 

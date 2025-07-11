@@ -3,7 +3,7 @@ import Modal from 'react-native-modal'
 
 // UI
 import ThemedText from './ThemedText'
-import { Colors } from '../../constant/Colors'
+import { Colors } from '../constant/Colors'
 import BackButton from './Backbutton'
 import Spacer from './Spacer'
 

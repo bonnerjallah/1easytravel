@@ -4,19 +4,20 @@ import * as Location from 'expo-location';
 
 // UI
 import { Colors } from "../../constant/Colors";
-import ThemedView from "../components/ThemedView";
-import ThemedText from "../components/ThemedText";
+import ThemedView from "../../components/ThemedView";
+import ThemedText from "../../components/ThemedText";
 import icons from "../../constant/icons" 
 import images from '../../constant/images';
+import Spacer from '../../components/Spacer';
+
 
 // State Management
 import { useSetAtom } from 'jotai';
 import { userLocationAtom } from '../../atoms/locationAtoms';
-import Spacer from '../components/Spacer';
 
 // SubComponents
-import Rides from '../components/Rides';
-import Eats from '../components/Eats';
+import Rides from '../../components/Rides';
+import Eats from '../../components/Eats';
 
 
 

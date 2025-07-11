@@ -5,8 +5,8 @@ import { router } from 'expo-router'
 import ThemedText from './ThemedText'
 import Spacer from './Spacer'
 import ThemedCard from './ThemedCard'
-import images from '../../constant/images'
-import icons from '../../constant/icons'
+import images from '../constant/images'
+import icons from '../constant/icons'
 
 const suggestionItems = [
   { title: 'Food', image: images.bowl },

@@ -1,6 +1,6 @@
 import { Text, useColorScheme} from 'react-native';
-import { Colors } from '../../constant/Colors';
-import { Typography } from '../../constant/Typography'; 
+import { Colors } from '../constant/Colors';
+import { Typography } from '../constant/Typography'; 
 
 const ThemedText = ({ style, title = false, variant = 'body', ...props }) => {
     

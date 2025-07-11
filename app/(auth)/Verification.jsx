@@ -13,11 +13,11 @@ import { tempUserAtom } from "../../atoms/tempUserAtoms";
 
 // UI
 import { Colors } from "../../constant/Colors";
-import ThemedView from "../components/ThemedView";
-import ThemedText from "../components/ThemedText";
-import Spacer from "../components/Spacer";
-import ThemedButton from "../components/ThemedButton";
-import BackButton from "../components/Backbutton";
+import ThemedView from "../../components/ThemedView";
+import ThemedText from "../../components/ThemedText";
+import Spacer from "../../components/Spacer";
+import ThemedButton from "../../components/ThemedButton";
+import BackButton from "../../components/Backbutton";
 
 const Verification = () => {
   const { trimmedEmail, trimmedPwd } = useAtomValue(tempUserAtom);

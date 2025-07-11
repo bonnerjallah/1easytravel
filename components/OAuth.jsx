@@ -1,14 +1,11 @@
 import { Pressable, TouchableOpacity, View, Image, StyleSheet } from 'react-native'
 
 
-import images from "../../constant/images"
 
-import facebook from "../../assets/icons/facebook.png"
-import apple from "../../assets/icons/apple.png"
-import google from "../../assets/icons/google.png"
+import facebook from "../assets/icons/facebook.png"
+import apple from "../assets/icons/apple.png"
+import google from "../assets/icons/google.png"
 
-
-import Spacer from './Spacer'
 
 
 const OAuth = () => {

@@ -6,9 +6,9 @@ import { Linking } from 'react-native';
 
 
 //UI
-import ThemedView from '../components/ThemedView'
-import ThemedText from '../components/ThemedText'
-import Spacer from '../components/Spacer'
+import ThemedView from '../../components/ThemedView'
+import ThemedText from '../../components/ThemedText'
+import Spacer from '../../components/Spacer'
 import icons from '../../constant/icons'
 import { Ionicons } from '@expo/vector-icons'
 import { Colors } from '../../constant/Colors';

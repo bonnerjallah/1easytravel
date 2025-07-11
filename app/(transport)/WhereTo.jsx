@@ -2,8 +2,8 @@ import { Text, StyleSheet, useColorScheme } from 'react-native';
 import { useEffect, useState } from 'react';
 
 // Components
-import WhereToModal from '../components/WhereToModal';
-import ThemedView from '../components/ThemedView';
+import WhereToModal from '../../components/WhereToModal';
+import ThemedView from '../../components/ThemedView';
 import { Colors } from '../../constant/Colors';
 
 const WhereTo = () => {

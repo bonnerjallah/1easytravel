@@ -2,9 +2,9 @@ import { Image, StyleSheet, Text, useColorScheme, View } from 'react-native'
 import { useEffect } from 'react'
 
 //UI
-import ThemedView from '../components/ThemedView'
-import ThemedText from '../components/ThemedText'
-import Spacer from '../components/Spacer'
+import ThemedView from '../../components/ThemedView'
+import ThemedText from '../../components/ThemedText'
+import Spacer from '../../components/Spacer'
 import {Colors} from "../../constant/Colors"
 import images from '../../constant/images'
 

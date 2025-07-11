@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { TouchableOpacity, useColorScheme } from 'react-native';
 import { router } from 'expo-router';
-import { Colors } from '../../constant/Colors';
+import { Colors } from '../constant/Colors';
 
 const BackButton = ({ style, color = "#000", size = 25 }) => {
 

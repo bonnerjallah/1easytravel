@@ -3,11 +3,11 @@ import { useState } from 'react';
 // UI
 import ThemedText from './ThemedText';
 import Spacer from './Spacer';
-import { Colors } from '../../constant/Colors';
+import { Colors } from '../constant/Colors';
 import { Ionicons } from '@expo/vector-icons';
 import ThemedCard from './ThemedCard';
 
-import images from '../../constant/images';
+import images from '../constant/images';
 import RestaurantsModal from './RestaurantsModal';
 
 

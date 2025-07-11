@@ -2,9 +2,9 @@ import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { router } from 'expo-router'
 
 //UI
-import ThemedView from '../components/ThemedView'
-import ThemedText from '../components/ThemedText'
-import ThemedButton from '../components/ThemedButton'
+import ThemedView from '../../components/ThemedView'
+import ThemedText from '../../components/ThemedText'
+import ThemedButton from '../../components/ThemedButton'
 
 
 //FireBase

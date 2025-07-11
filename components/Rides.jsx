@@ -7,7 +7,7 @@ import { router } from 'expo-router'
 import ThemedText from './ThemedText'
 import Spacer from "../components/Spacer"
 import { Ionicons } from '@expo/vector-icons'
-import { Colors } from '../../constant/Colors'
+import { Colors } from '../constant/Colors'
 
 //Components
 import PreviousRides from './PreviousRides'

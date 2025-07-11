@@ -2,18 +2,17 @@ import { Image, StyleSheet, TouchableOpacity, useColorScheme, View, Linking} fro
 import { router } from 'expo-router'
 
 //UI
-import ThemedView from '../components/ThemedView'
-import ThemedText from '../components/ThemedText'
-import Spacer from '../components/Spacer'
-import Backbutton from "../components/Backbutton"
-import ChatBubble from "../components/MessageBubble"
+import ThemedView from '../../components/ThemedView'
+import ThemedText from '../../components/ThemedText'
+import Spacer from '../../components/Spacer'
+import Backbutton from "../../components/Backbutton"
+import ChatBubble from "../../components/MessageBubble"
 import { Colors } from '../../constant/Colors'
 
 
 //State Management
 import { useAtom } from 'jotai'
 import { selectedMessageAtom } from '../../atoms/messageAtoms'
-import icons from '../../constant/icons'
 import { Ionicons } from '@expo/vector-icons'
 
 

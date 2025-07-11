@@ -8,12 +8,12 @@ import { doc, updateDoc } from "firebase/firestore";
 import { auth, db } from '../../firebaseConfig';
 
 // Components
-import BackButton from '../components/Backbutton';
-import ThemedView from '../components/ThemedView';
-import ThemedText from '../components/ThemedText';
-import ThemedButton from '../components/ThemedButton';
-import ThemedTextInput from '../components/ThemedTextInput';
-import Spacer from '../components/Spacer';
+import BackButton from '../../components/Backbutton';
+import ThemedView from '../../components/ThemedView';
+import ThemedText from '../../components/ThemedText';
+import ThemedButton from '../../components/ThemedButton';
+import ThemedTextInput from '../../components/ThemedTextInput';
+import Spacer from '../../components/Spacer';
 import { Colors } from '../../constant/Colors';
 
 const CreateUser = () => {

@@ -1,10 +1,10 @@
 import { Image, StyleSheet, Text, useColorScheme, View, TouchableOpacity } from 'react-native'
 
 //UI
-import ThemedView from '../components/ThemedView'
-import ThemedText from '../components/ThemedText'
-import Spacer from '../components/Spacer'
-import ThemedCard from '../components/ThemedCard'
+import ThemedView from '../../components/ThemedView'
+import ThemedText from '../../components/ThemedText'
+import Spacer from '../../components/Spacer'
+import ThemedCard from '../../components/ThemedCard'
 import images from '../../constant/images'
 import icons from "../../constant/icons"
 

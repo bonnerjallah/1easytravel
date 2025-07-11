@@ -18,16 +18,16 @@ import { tempUserAtom } from "../../atoms/tempUserAtoms";
 //Icons
 import { Ionicons } from "@expo/vector-icons";
 
-import OAuth from "../components/OAuth";
+import OAuth from "../../components/OAuth";
 
 //Themed
 import { Colors } from "../../constant/Colors";
 import images from "../../constant/images";
-import ThemedView from "../components/ThemedView";
-import ThemedText from "../components/ThemedText";
-import ThemedTextInput from "../components/ThemedTextInput";
-import Spacer from "../components/Spacer";
-import ThemedButton from "../components/ThemedButton";
+import ThemedView from "../../components/ThemedView";
+import ThemedText from "../../components/ThemedText";
+import ThemedTextInput from "../../components/ThemedTextInput";
+import Spacer from "../../components/Spacer";
+import ThemedButton from "../../components/ThemedButton";
 
 const Register = () => {
   const colorScheme = useColorScheme();

@@ -1,7 +1,7 @@
 import { StyleSheet, Pressable, View, Image } from 'react-native'
 
 //Components
-import icons from '../../constant/icons'
+import icons from '../constant/icons'
 
 //UI
 import Spacer from './Spacer'
