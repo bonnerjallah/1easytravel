@@ -1,9 +1,11 @@
-import { Tabs, Redirect } from "expo-router";
+import { Tabs, router } from "expo-router";
 import { useColorScheme } from "react-native";
-import {useAtom} from "jotai"
-import {userAtoms} from "../../atoms/userAtoms"
+import { useEffect } from "react";
 
+//Firebase
+import { getAuth } from 'firebase/auth'
 
+//UI
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "../../constant/Colors";
 
@@ -14,10 +16,13 @@ export default () => {
     const themed = Colors[colorScheme] ?? Colors.light
 
 
-    // // 🔐 Redirect unauthenticated users
-    // if (!user) {
-    //     return <Redirect href="/(auth)/Login" />;
-    // }
+    useEffect(() => {
+        const unsub = getAuth().onAuthStateChanged((firebaseUser) => {
+            if (!firebaseUser) router.replace("/Login");
+        });
+  
+        return unsub; // 🔁 Cleans up the listener on unmount
+    }, []);
 
 
 

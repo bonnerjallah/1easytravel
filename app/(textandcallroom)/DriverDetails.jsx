@@ -33,20 +33,19 @@ const DriverDetails = () => {
   useEffect(() => {
     if (DriverData?.name) {
       const match = driversDetails.find((item) => item.name === DriverData.name);
+      
       if (match) {
         setDriver(match);
-        console.log("Driver details found:", match);
       } else {
         console.log("Driver not found");
       }
+
     } else {
       console.warn("DriverData is null or missing name");
     }
   }, [DriverData]);
 
-  useEffect(() => {
-    console.log("driver details (after state update):", driver);
-  }, [driver]);
+
 
   // 👇 Conditional rendering to avoid crashing while data loads
   if (!DriverData || !driver) {

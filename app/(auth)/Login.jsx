@@ -2,6 +2,10 @@ import { StyleSheet, useColorScheme, Image, TouchableOpacity, TouchableWithoutFe
 import { Link, router } from 'expo-router';
 import { useState } from 'react';
 
+//FireBase
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../../firebaseConfig';
+
 //Icons
 import { Ionicons } from "@expo/vector-icons";
 
@@ -46,11 +50,36 @@ const Login = () => {
         }
         
         try {
-
             const response = await signInWithEmailAndPassword(auth, email, pwd)
-            const user = response.user
+            const firebaseUser = response.user
 
-            setUser(user)
+            // ✅ Safety check
+            if (!firebaseUser?.uid) {
+            setErrMsg("Something went wrong. Please try again.");
+            return;
+            }
+
+            const userDoc = await getDoc(doc(db, "users", firebaseUser.uid))
+
+            if(userDoc.exists()) {
+                const profileData = userDoc.data()
+                
+                setUser({
+                    uid: firebaseUser.uid,
+                    email: firebaseUser.email,
+                    ...profileData
+                })
+            } else {
+                console.log("User profile not found in firestore")
+
+                setUser({
+                    uid: firebaseUser.uid,
+                    email: firebaseUser.email,
+                });
+            }
+
+
+
             setEmail("")
             setPwd("")
 

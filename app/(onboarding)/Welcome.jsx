@@ -28,8 +28,8 @@
 
     const handleFinish = async () => {
       await AsyncStorage.setItem('seenOnboarding', 'true');
-      // router.replace('../(auth)/Login'); 
-      router.replace("../(dashboard)/Home")       
+      router.replace('../(auth)/Login'); 
+      // router.replace("../(dashboard)/Home")       
     };
 
     return (

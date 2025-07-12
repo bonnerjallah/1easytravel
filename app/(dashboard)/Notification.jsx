@@ -35,6 +35,8 @@ const Notification = () => {
   const colorScheme = useColorScheme()
   const themed = Colors[colorScheme] ?? Colors.light
 
+
+  //GROUP DATES
   const getGroup = (timestamp) => {
     const now = new Date()
     const date = new Date(timestamp)
@@ -48,6 +50,8 @@ const Notification = () => {
     return format(date, 'MMMM d, yyyy')
   }
 
+
+  //GET TIME
   const getDisplayTime = (timestamp) => {
     const date = new Date(timestamp)
     const now = new Date()

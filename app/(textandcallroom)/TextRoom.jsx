@@ -25,8 +25,6 @@ const TextRoom = () => {
 
   if (!message) return null;
 
-  console.log("message", message)
-
   return (
     <ThemedView style={styles.container} safe={true}>
       <Spacer height={25} />
