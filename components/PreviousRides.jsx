@@ -34,11 +34,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 5,
     flexDirection: "row",
-    columnGap: 10
+    columnGap: 10,
+    backgroundColor: "rgba(0, 179, 224, 0.2)"
   },
   
   iconStyle:{
-    backgroundColor: "lightgray",
+    backgroundColor: "#60cd83",
     width: 30,
     height: 30,
     padding: 5,

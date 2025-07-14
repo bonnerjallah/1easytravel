@@ -36,8 +36,7 @@ const images = {
   diana: require("../assets/rastaurantImage/dianaRestaurant.jpg"),
   eatery: require("../assets/rastaurantImage/eateryRestaurant.jpg"),
   evelyns: require("../assets/rastaurantImage/evelyns.jpg"),
-  fuzion: require("../assets/rastaurantImage/fuzion.jpg")
-
+  fuzion: require("../assets/rastaurantImage/fuzion.jpg"),
 };
 
 export default images;

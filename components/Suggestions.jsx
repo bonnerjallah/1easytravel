@@ -9,7 +9,7 @@ import images from '../constant/images'
 import icons from '../constant/icons'
 
 const suggestionItems = [
-  { title: 'Food', image: images.bowl },
+  { title: 'Food', image: images.food },
   { title: 'Ride', image: icons.car },
   { title: 'Rental Cars', image: images.rentalKeys },
   { title: 'Grocery', image: images.grocery }, 
@@ -79,6 +79,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 10,
+    backgroundColor: "rgba(0, 179, 224, 0.2)"
   },
 
   image: {

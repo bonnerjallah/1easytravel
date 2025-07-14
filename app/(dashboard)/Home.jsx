@@ -74,7 +74,7 @@ const Home = ({}) => {
           style={[styles.screenSelect, showEats && styles.activeTab]}
           onPress={() => setShowEats(true)}        
         >
-          <Image source={images.food} />
+          <Image source={images.food} style={{width:"20%", height: 40}}/>
           <ThemedText variant='title' title>Eats</ThemedText>
         </TouchableOpacity>
       </View>

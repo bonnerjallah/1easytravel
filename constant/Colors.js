@@ -1,6 +1,6 @@
 export const Colors = {
   light: {
-    background: '#FFFFFF',
+    background: '#ffffff',
     primary: '#0057FF',
     secondary: '#4a4e69',
     accent: '#FFCD00',
@@ -12,13 +12,13 @@ export const Colors = {
     border: '#E5E5EA',
     disabled: '#BEBEC2',
     mapMarker: '#FF6B00',
-    button: "#000000",
+    button: "#00cddb",
     buttontitle: "#FFFFFF",
     placeholder: '#999',
-    tabIconColor: "#000000",
-    iconColorFocused: "#000000",
+    tabIconColor: "#00b2e9",
+    iconColorFocused: "#60cd83",
     inputBackground: "#F0F0F0",
-    cardBackGround: "#dee2e6"
+    cardBackGround: "#rgba(0, 179, 224, 0.2)"
   },
 
   dark: {
@@ -28,18 +28,18 @@ export const Colors = {
     accent: '#FFCD00',
     danger: '#FF453A',
     success: '#30D158',
-    title: '#FFFFFF',
+    title: '#6c757d',
     text: 'white',
     inputText: "black",
     subtext: '#8E8E93',
     border: '#3A3A3C',
     disabled: '#5C5C5E',
     mapMarker: '#FF6B00',
-    button: "#FFFFFF",
+    button: "#00cddb",
     placeholder: '#666',
     tabIconColor: "#6c757d",
     iconColorFocused: "#FFFFFF",
     inputBackground: "#2C2C2E",
-    cardBackGround: "#6c757d"
+    cardBackGround: "#rgba(0, 179, 224, 0.2)"
   },
 };

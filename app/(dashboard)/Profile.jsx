@@ -31,7 +31,7 @@ const profileOptions = [
   {
     label: 'Payment Settings',
     icon: icons.cashIcon,
-    // route: "/paymentSettings"
+    route: "/(profile)/PaymentSettings"
   },
   {
     label: 'Customer Support',
@@ -84,6 +84,25 @@ const Profile = () => {
     }
   };
 
+  const handleNavigate = (item) => {
+    switch (item.label) {
+      case 'Payment Settings':
+        router.push("/(profile)/PaymentSettings");
+        break;
+
+      // Add other cases if you want to handle them later:
+      case 'Customer Support':
+      case 'Manage Address':
+      case 'Settings':
+      case 'Car Rental':
+      case 'My Trips':
+      default:
+        console.log(`No route defined for "${item.label}"`);
+        break;
+    }
+  };
+
+
 
   return (
     <ThemedView style={styles.container} safe = {true}>
@@ -125,7 +144,7 @@ const Profile = () => {
           <TouchableOpacity 
             key={idx} 
             style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginVertical: 10 }}
-            // onPress={router.push(item.route)}
+            onPress={() => handleNavigate(item)}
           >
             <Image source={item.icon} style={{ width: 24, height: 24, tintColor: "#778da9", }} />
             <ThemedText>{item.label}</ThemedText>

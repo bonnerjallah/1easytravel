@@ -33,7 +33,7 @@ const Rides = ({setShowEats, setShowRestaurentModal}) => {
           height: 80, 
           flexDirection: "row", 
           columnGap: 5, 
-          backgroundColor: "#dee2e6",
+          backgroundColor: "rgba(0, 179, 224, 0.2)",
           alignItems: "center",
           padding: 3,
         }}

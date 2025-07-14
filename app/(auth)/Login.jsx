@@ -108,7 +108,7 @@ const Login = () => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
          <ThemedView style = {styles.container} safe = {true}>
-            <Image source = {images.login} style = {{width: "100%", height: 300, alignSelf: "center"}}  />
+            <Image source = {images.logo} style = {{width: "100%", height: 300, alignSelf: "center"}}  />
 
             <ThemedText variant='heading'>
                 Sign In

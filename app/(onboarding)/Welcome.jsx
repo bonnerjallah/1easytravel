@@ -49,10 +49,9 @@
         >
           {Onboarding.map((item) => (
             <View style={styles.slide} key={item.id}>
-              <View>
+              <View style={styles.imageWrapper}>
                 <Image source={item.image} style={styles.image} resizeMode="contain" />
               </View>
-              <Spacer />
               <ThemedText style={styles.title} variant='title'>{item.title}</ThemedText>
             </View>
           ))}
@@ -87,15 +86,16 @@
     slide: {
       flex: 1,
       alignItems: 'center',
-      paddingHorizontal: 20,
-      marginTop: 50
+      marginTop: 50,
+      width: width, 
+      alignSelf:"center"
     },
     image: {
       width: width * 0.8,
       height: height * 0.5,
     },
     title: {
-      marginTop: -100
+      marginTop: -50
     },
     dot: {
       backgroundColor: '#ccc',
@@ -113,7 +113,7 @@
     },
 
     arroRightStyle:{
-      backgroundColor: "black",
+      backgroundColor: "#00cddb",
       color: "white",
       padding: 10,
       borderRadius: 10,
@@ -125,5 +125,12 @@
       height: 50,
       justifyContent: "center",
       alignItems: "center"
+    },
+    imageWrapper: {
+      width: '100%',
+      height: height * 0.5,
+      justifyContent: 'center',
+      alignItems: 'center',
     }
+
   });

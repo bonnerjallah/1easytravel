@@ -128,7 +128,7 @@ const EditProfile = () => {
         ))}
 
         <ThemedButton
-          style={{ justifyContent: 'center', alignItems: 'center' }}
+          style={{ justifyContent: 'center', alignItems: 'center', backgroundColor:"#778da9" }}
           onPress={handleUserDataSubmit}
         >
           <ThemedText
@@ -157,6 +157,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 8,
     marginTop: 4,
+    backgroundColor: "#ced4da"
   },
   profileImageBox: {
     borderWidth: 1,
