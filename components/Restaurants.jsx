@@ -54,7 +54,7 @@ const Restaurants = ({ setShowEats }) => {
                 <View style={{flexDirection:"row", columnGap: 10, marginTop: 5}}>
                     <View style={styles.restaurentsNameWrapper}>
                         <Image
-                        source={images.bowl}
+                        source={images.food}
                         style={{ width: 26, height: 26, marginRight: 5, marginTop: -10 }}
                         />
                     </View>

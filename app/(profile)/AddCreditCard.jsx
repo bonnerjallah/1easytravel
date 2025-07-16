@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native'
+import { router } from 'expo-router';
 
 //UI
 import ThemedButton from '../../components/ThemedButton';

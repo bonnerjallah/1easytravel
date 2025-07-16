@@ -83,7 +83,7 @@ const Notification = () => {
           <View key={index} style={styles.notificationItem}>
             <Ionicons name={item.icon} size={30} color={themed.tabIconColor} style={styles.icon} />
             <View style={{ flex: 1 }}>
-              <ThemedText title style={styles.title}>{item.title}</ThemedText>
+              <ThemedText style={styles.title}>{item.title}</ThemedText>
               <ThemedText>{item.message}</ThemedText>
             </View>
             <ThemedText style={styles.time}>{getDisplayTime(item.timestamp)}</ThemedText>

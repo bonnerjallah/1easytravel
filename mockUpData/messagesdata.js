@@ -121,29 +121,170 @@ export const convo = [
 
 export const driversDetails = [
   {
+    driver_id: 1,
     profilePic: images.profileImage1,
     name: "Marvin McKinney",
     email: "marvinmckinney@gmail.com",
     location: "Montserrado, Monrovia, Liberia",
     role: "Driver",
-    phone: "+231776000000" 
-
+    phone: "+231776000000",
+    rating: "4.80",
+    latitude: 6.300774,
+    longitude: -10.797160,
   },
   {
+    driver_id: 2,
     profilePic: images.profileImage2,
     name: "Jessica Smith",
     email: "jessicasmith@gmail.com",
     location: "Montserrado, Monrovia, Liberia",
     role: "Driver",
-    phone: "+231776000000" 
-
+    phone: "+231776000000",
+    rating: "3.80",
+    latitude: 6.302921,
+    longitude: -10.796421,
   },
   {
+    driver_id: 3,
     profilePic: images.profileImage3,
     name: "Amber Wilkes",
     email: "amberwilkes@gmail.com",
     location: "Montserrado, Monrovia, Liberia",
-    role: "Driver"
+    role: "Driver",
+    rating: "5.00",
+    latitude: 6.294977,
+    longitude:-10.788350,
   }
-]
+];
+
+
+
+export const trips = [
+  {
+    ride_id: "trip_001",
+    origin_address: "100 Broad St, Monrovia, Liberia",
+    destination_address: "University of Liberia, Monrovia",
+    origin_latitude: 6.3006,
+    origin_longitude: -10.7969,
+    destination_latitude: 6.3103,
+    destination_longitude: -10.8012,
+    ride_time: "2025-07-10T09:30:00Z",
+    fare_price: 6.75,
+    payment_status: "paid",
+    driver_id: 1,
+    user_id: "user_001",
+    created_at: "2025-07-10T09:00:00Z",
+    driver: {
+      driver_id: 1,
+      profilePic: images.profileImage1,
+      name: "Marvin McKinney",
+      email: "marvinmckinney@gmail.com",
+      location: "Montserrado, Monrovia, Liberia",
+      role: "Driver",
+      phone: "+231776000000",
+      rating: "4.80"
+    }
+  },
+  {
+    ride_id: "trip_002",
+    origin_address: "ELWA Junction, Paynesville, Liberia",
+    destination_address: "Red Light Market, Liberia",
+    origin_latitude: 6.3100,
+    origin_longitude: -10.6780,
+    destination_latitude: 6.3324,
+    destination_longitude: -10.6891,
+    ride_time: "2025-07-11T14:15:00Z",
+    fare_price: 4.00,
+    payment_status: "unpaid",
+    driver_id: 2,
+    user_id: "user_002",
+    created_at: "2025-07-11T14:00:00Z",
+    driver: {
+      driver_id: 2,
+      profilePic: images.profileImage2,
+      name: "Jessica Smith",
+      email: "jessicasmith@gmail.com",
+      location: "Montserrado, Monrovia, Liberia",
+      role: "Driver",
+      phone: "+231776000000",
+      rating: "3.80"
+    }
+  },
+  {
+    ride_id: "trip_003",
+    origin_address: "Sinkor 19th Street, Monrovia, Liberia",
+    destination_address: "JFK Medical Center, Monrovia",
+    origin_latitude: 6.2961,
+    origin_longitude: -10.7792,
+    destination_latitude: 6.2994,
+    destination_longitude: -10.7817,
+    ride_time: "2025-07-12T11:45:00Z",
+    fare_price: 5.50,
+    payment_status: "paid",
+    driver_id: 3,
+    user_id: "user_003",
+    created_at: "2025-07-12T11:30:00Z",
+    driver: {
+      driver_id: 3,
+      profilePic: images.profileImage3,
+      name: "Amber Wilkes",
+      email: "amberwilkes@gmail.com",
+      location: "Montserrado, Monrovia, Liberia",
+      role: "Driver",
+      rating: "5.00"
+    }
+  },
+  {
+    ride_id: "trip_004",
+    origin_address: "Camp Johnson Rd, Monrovia, Liberia",
+    destination_address: "City Hall, Tubman Blvd, Liberia",
+    origin_latitude: 6.3095,
+    origin_longitude: -10.7970,
+    destination_latitude: 6.3109,
+    destination_longitude: -10.7899,
+    ride_time: "2025-07-13T08:00:00Z",
+    fare_price: 3.25,
+    payment_status: "paid",
+    driver_id: 1,
+    user_id: "user_004",
+    created_at: "2025-07-13T07:40:00Z",
+    driver: {
+      driver_id: 1,
+      profilePic: images.profileImage1,
+      name: "Marvin McKinney",
+      email: "marvinmckinney@gmail.com",
+      location: "Montserrado, Monrovia, Liberia",
+      role: "Driver",
+      phone: "+231776000000",
+      rating: "4.80"
+    }
+  },
+  {
+    ride_id: "trip_005",
+    origin_address: "SKD Blvd, Paynesville, Liberia",
+    destination_address: "Monrovia Mall, Tubman Blvd, Liberia",
+    origin_latitude: 6.2951,
+    origin_longitude: -10.7120,
+    destination_latitude: 6.3124,
+    destination_longitude: -10.7935,
+    ride_time: "2025-07-14T17:20:00Z",
+    fare_price: 6.00,
+    payment_status: "unpaid",
+    driver_id: 2,
+    user_id: "user_005",
+    created_at: "2025-07-14T17:00:00Z",
+    driver: {
+      driver_id: 2,
+      profilePic: images.profileImage2,
+      name: "Jessica Smith",
+      email: "jessicasmith@gmail.com",
+      location: "Montserrado, Monrovia, Liberia",
+      role: "Driver",
+      phone: "+231776000000",
+      rating: "3.80"
+    }
+  }
+];
+
+
 

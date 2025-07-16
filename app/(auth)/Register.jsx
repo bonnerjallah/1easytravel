@@ -64,7 +64,7 @@ const Register = () => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <ThemedView style={styles.container} safe={true}>
         <Image
-          source={images.login}
+          source={images.logo}
           style={{ width: "100%", height: 300, alignSelf: "center" }}
         />
 

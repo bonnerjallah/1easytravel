@@ -10,7 +10,7 @@ import icons from "../../constant/icons"
 
 
 const marketPlaceItems = [
-  { title: 'Food', image: images.bowl },
+  { title: 'Food', image: images.food },
   { title: 'Ride', image: icons.car },
   { title: 'Rental Cars', image: images.rentalKeys },
   { title: 'Grocery', image: images.grocery }, 

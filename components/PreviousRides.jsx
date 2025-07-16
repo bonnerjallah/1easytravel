@@ -1,4 +1,4 @@
-import { StyleSheet, Pressable, View, Image } from 'react-native'
+import { StyleSheet, Pressable, View, Image, TouchableOpacity } from 'react-native'
 
 //Components
 import icons from '../constant/icons'
@@ -10,15 +10,15 @@ import ThemedText from './ThemedText'
 const PreviousRides = () => {
   return (
     <View>
-        <Pressable style={styles.prevTripWrapper}>
+        <TouchableOpacity style={styles.prevTripWrapper}>
             <Image source={icons.address}  style={styles.iconStyle}/>
             <ThemedText>9208 Aloysia Ln</ThemedText>
-        </Pressable>
+        </TouchableOpacity>
         <Spacer height={15} />
-        <Pressable style={styles.prevTripWrapper}>
+        <TouchableOpacity style={styles.prevTripWrapper}>
             <Image source={icons.address}  style={styles.iconStyle}/>
             <ThemedText>9208 Aloysia Ln</ThemedText>
-        </Pressable>    
+        </TouchableOpacity>    
     </View>
   )
 }
@@ -27,7 +27,6 @@ export default PreviousRides
 
 const styles = StyleSheet.create({
     prevTripWrapper:{
-    borderWidth: .5,
     borderRadius: 10,
     borderColor: "gray",
     height: 70,

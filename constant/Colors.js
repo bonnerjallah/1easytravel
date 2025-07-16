@@ -6,7 +6,7 @@ export const Colors = {
     accent: '#FFCD00',
     danger: '#FF4D4D',
     success: '#1BC47D',
-    title: '#111111',
+    title: '#60cd83',
     text: 'black',
     subtext: '#6E6E73',
     border: '#E5E5EA',
