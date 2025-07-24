@@ -1,169 +1,271 @@
-import { Text, StyleSheet, useColorScheme, Image, View, } from 'react-native';
-import MapView, { PROVIDER_DEFAULT } from "react-native-maps"
-import { Marker } from 'react-native-maps';
-import { useEffect, useState } from 'react';
+import { Text, StyleSheet, useColorScheme, Image, View, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Platform } from 'react-native';
+import { useState, useEffect } from 'react';
+import { router } from 'expo-router';
 
 // COMPONENTS
-import WhereToModal from '../../components/WhereToModal';
 import ThemedView from '../../components/ThemedView';
 import { Colors } from '../../constant/Colors';
 import BackButton from '../../components/Backbutton';
 import Spacer from '../../components/Spacer';
 import ThemedText from '../../components/ThemedText';
 import { Ionicons } from '@expo/vector-icons';
-
-
+import RideLayout from '../../components/RideLayout';
+import ThemedButton from '../../components/ThemedButton';
+import ThemedTextInput from '../../components/ThemedTextInput';
 
 //STATE MANAGEMENT
 import { useAtomValue, useSetAtom } from 'jotai';
-import { userLocationAtom } from '../../atoms/locationAtoms';
-import { driversDetails } from '../../mockUpData/messagesdata';
+import { userLocationAtom, userPickUpLocation } from '../../atoms/locationAtoms';
+import {userAtoms} from "../../atoms/userAtoms"
 import { destinationAtom } from '../../atoms/destinationAtoms';
+
 
 //API KEY
 import { EXPO_PUBLIC_GEOAPIFY_API_KEY } from '@env';
 
-//UTILS FUNCTIONS
-import { calculateRegion } from '../../lib/map';
-import { generateMarkers } from '../../lib/map';
-import { UserMarker } from '../../lib/map';
-import { UserDestinationMarker } from "../../lib/map";
-
+//MOCK DATA
+import { trips } from '../../mockUpData/messagesdata';
 
 
 
 
 const WhereTo = () => {
 
+
+  const user = useAtomValue(userAtoms)
+  const userLocation = useAtomValue(userLocationAtom)
+  const setUserDestination = useSetAtom(destinationAtom)
+  const setAddress = useSetAtom(userPickUpLocation);
+  const userAddress = useAtomValue(userPickUpLocation);
+
+  const [destination, setDestination] = useState('');
+
+  const apikey = EXPO_PUBLIC_GEOAPIFY_API_KEY;
+
   const colorScheme = useColorScheme();
   const themed = Colors[colorScheme] ?? Colors.light;
 
-  const userLocation = useAtomValue(userLocationAtom)
-  const userDestination = useAtomValue(destinationAtom)
-  const setDestination = useSetAtom(destinationAtom);
+  const userRecentTrips = trips.slice(0, 3);
 
-  const [showWhereToModal, setShowWhereToModal] = useState(false);
-  const [businesses, setBusinesses] = useState([])
+  const [loading, setLoading] = useState(false)
 
+
+
+  // Reverse Geocoding to get address from user location
+  useEffect(() => {
+      const fetchAddress = async () => {
+        try {
+          const response = await fetch(`https://api.geoapify.com/v1/geocode/reverse?lat=${userLocation.latitude}&lon=${userLocation.longitude}&format=json&apiKey=${EXPO_PUBLIC_GEOAPIFY_API_KEY}`);
   
-  const lat = "6.312552"
-  const lng = "-10.800014"
-  const userMockLag = parseFloat(lat)
-  const userMockLng = parseFloat(lng)
+          const data = await response.json();
+  
+          if (data && Array.isArray(data.results) && data.results.length > 0) {
+            if (data.results[0].formatted) {
+              setAddress(data.results[0].formatted);
+            } else {
+              console.log("No 'formatted' property in the first result");
+            }
+          } else {
+            console.log("No results array or empty results");
+          }
+        } catch (error) {
+          console.error("Reverse Geocoding Error:", error);
+        }
+      };
+  
+  
+      if (userLocation.latitude && userLocation.longitude) {
+          fetchAddress();
+      }
+    }, [userLocation]);
+  
 
+  // Helper to calculate miles between two points
+  const getDistanceInMiles = (lat1, lon1, lat2, lon2) => {
+    const toRad = (value) => (value * Math.PI) / 180;
+    const R = 3958.8; // Radius of Earth in miles
 
+    const dLat = toRad(lat2 - lat1);
+    const dLon = toRad(lon2 - lon1);
 
-  const userPoint = {
-    // latitude: userLocation.latitude ?? userMockLag,
-    // longitude: userLocation.longitude ?? userMockLng,
+    const a =
+      Math.sin(dLat / 2) ** 2 +
+      Math.cos(toRad(lat1)) *
+        Math.cos(toRad(lat2)) *
+        Math.sin(dLon / 2) ** 2;
 
-    latitude:  userMockLag,
-    longitude: userMockLng,
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    return (R * c).toFixed(2);
   };
 
-  const destinationPoint = userDestination ? 
-    {
-      latitude: userDestination.lat,
-      longitude: userDestination.lon,
-    }
-  : userPoint;
+  // Static map URL for recent trips
+  const lat = '6.312552';
+  const lng = '-10.800014';
 
-  const region = calculateRegion(userPoint, destinationPoint, 1.5); 
+  const mapUrl = `https://maps.geoapify.com/v1/staticmap?style=osm-bright-smooth&width=600&height=400&center=lonlat:${lng},${lat}&zoom=14&apiKey=${apikey}`;
 
-  const category = "catering.restaurant,commercial.supermarket,healthcare, entertainment, office.government, religion.place_of_worship, education.school, emergency";
 
-  
-  const getNearbyPlaces = async (lat, lon, cat = category) => {
+  // Function to get coordinates from address using Geoapify API
+  const getCoordinates = async (address) => {
     const apiKey = EXPO_PUBLIC_GEOAPIFY_API_KEY;
-    const radius = 1000; // meters
+    // Ensure the query includes Monrovia, Liberia for better local accuracy
+    let adjustedAddress = address.trim();
 
-    const url = `https://api.geoapify.com/v2/places?categories=${cat}&filter=circle:${lon},${lat},${radius}&bias=proximity:${lon},${lat}&limit=20&apiKey=${apiKey}`;
+    if (!adjustedAddress.toLowerCase().includes("liberia")) {
+      adjustedAddress += ", Monrovia Liberia";
+    }
+    const encodedAddress = encodeURIComponent(adjustedAddress);
+    const url = `https://api.geoapify.com/v1/geocode/search?text=${encodedAddress}&apiKey=${apiKey}`;
 
-    const res = await fetch(url);
-    const data = await res.json();
+    const response = await fetch(url);
+    const data = await response.json();
+    console.log("Geocoding response data:", data); // Debug log
 
     if (data.features && data.features.length > 0) {
-      return data.features.map((place) => ({
-        id: place.properties.place_id,
-        name: place.properties.name,
-        lat: place.geometry.coordinates[1],
-        lon: place.geometry.coordinates[0],
-      }));
-    } else {
-      return [];
+      const [lon, lat] = data.features[0].geometry.coordinates;
+        return { lat, lon };
+      } else {
+        return null;
     }
   };
 
-  useEffect(() => {
-    getNearbyPlaces(userMockLag, userMockLng).then(setBusinesses);
-  }, []);
+  // Handle destination confirmation
+  const handleDestinatoinConfirm = () => {
+    if (!destination.trim()) return;
+      setLoading(true);
+      getCoordinates(destination)
+        .then((coords) => {
+          setLoading(false);
 
-
-
-
-
-
-
-
-  useEffect(() => {
-    setShowWhereToModal(true);
-  }, []);
+          if (coords) {
+            setUserDestination(coords);
+            console.log("Destination Coordinates:", coords);
+            router.push("/(transport)/ConfirmRide");
+          } else {
+            alert("Location not found");
+          }
+        })
+        .catch((error) => {
+          setLoading(false);
+          console.error("Error fetching coordinates:", error);
+          alert("Error fetching location");
+        });
+  }
+  
 
   return (
-    <ThemedView style={styles.container} safe>
-      <Spacer />
+    <RideLayout snapPoints={['35%', '85%']} index={1}>
+      <View style={{ flex: 1 }}>
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          keyboardVerticalOffset={80}
+        >
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={{ flex: 1, padding: 16 }}>
+              <ThemedText style={{ fontSize: 18, marginBottom: 10 }} variant='title' title>
+                Set your destination
+              </ThemedText>
 
-      <MapView
-        provider={PROVIDER_DEFAULT}
-        style={{width:"100%", height: "100%"}}
-        mapType="mutedStandard"
-        showsPointsOfInterest = {false}
-        initialRegion={{
-          latitude: userMockLag,
-          longitude: userMockLng,
-          latitudeDelta: 0.03,   // Smaller delta = more zoomed in
-          longitudeDelta: 0.01,
-        }}        
-        showsUserLocation= {true}
-        userInterfaceStyle='light'
-        onLongPress={(e) => {
-          const { latitude, longitude } = e.nativeEvent.coordinate;
-          setDestination({ lat: latitude, lon: longitude }); 
-        }}
-      >
-        <UserMarker
-          location={{
-            // latitude: userLocation?.latitude ?? userMockLag,
-            // longitude: userLocation?.longitude ?? userMockLng,
-            latitude: userMockLag,
-            longitude: userMockLng,
-          }}
-        />    
+            <View style={{flexDirection:"row", borderWidth: 1, height: 120, alignItems:"center", padding: 10, borderRadius: 5}}>
+              <View style={{justifyContent:"center",alignItems:"center"}}>
+                <Ionicons name='stop-circle' />
+                <View style={{
+                    width: 1,
+                    height: 35, 
+                    backgroundColor: 'gray',
+                    marginVertical: 7,
+                  }} />            
+                  <Ionicons name = "stop" />
+              </View>
 
-        <UserDestinationMarker destination={userDestination} />
+            <Spacer width={10}/>
 
-        {businesses.map((biz) => (
-          <Marker
-            key={biz.id}
-            coordinate={{ latitude: biz.lat, longitude: biz.lon }}
-            title={biz.name}
-            pinColor="orange"
-          />
-        ))}
+            <View style={{width:'100%', rowGap: 10}}>
+              <ThemedTextInput
+                placeholder={loading ?"loading" : userAddress} 
+                style={{borderWidth: 0, borderRadius:5, width:"95%", height: 50, backgroundColor:"lightgray"}}
+              />
+              <ThemedTextInput 
+                placeholder="Where to?"
+                returnKeyType="done"
+                blurOnSubmit={true}
+                value={destination}
+                onChangeText={setDestination}
+                onSubmitEditing={async () => {
+                  if (!destination.trim()) return;
+                    setLoading(true);
+                    const coords = await getCoordinates(destination);
+                    setLoading(false);
 
-  
-        {generateMarkers(driversDetails)}
+                    if (coords) {
+                      setUserDestination(coords);
+                      console.log("Destination Coordinates:", coords);
+                      onClose();
+                    } else {
+                      alert("Location not found");
+                    }
+                }}
+                style={{
+                  borderWidth: 0,
+                  borderRadius: 5,
+                  width: "95%",
+                  height: 50,
+                  backgroundColor: "lightgray"
+                }}
+              />
+            </View>
+        </View>
+              <ThemedText style={{ fontWeight: 'bold', marginVertical: 10 }} variant='title' title >
+                Recent Destinations
+              </ThemedText>
 
-    
-
-
-      </MapView>
-
-      <WhereToModal
-        isVisible={showWhereToModal}
-        onClose={() => setShowWhereToModal(false)}
-      />
-    </ThemedView>
+              {/* Render recent trips as simple mapped Views instead of FlatList */}
+              <View>
+                {userRecentTrips.map((item) => (
+                  <View
+                    key={item.ride_id}
+                    style={{ flexDirection: 'row', gap: 10, marginBottom: 10 }}
+                  >
+                    <Ionicons
+                      name="time"
+                      size={40}
+                      color={themed.tabIconColor}
+                    />
+                    <View style={{ width: 100, height: 80 }}>
+                      <Image
+                        source={{ uri: mapUrl }}
+                        style={{ width: '100%', height: '100%' }}
+                        resizeMode="cover"
+                      />
+                    </View>
+                    <View style={{ flex: 1 }}>
+                      <ThemedText>
+                        {getDistanceInMiles(
+                          item.origin_latitude,
+                          item.origin_longitude,
+                          item.destination_latitude,
+                          item.destination_longitude
+                        )}{' '}
+                        miles
+                      </ThemedText>
+                      <ThemedText>{item.destination_address}</ThemedText>
+                      <ThemedText>Fare: ${item.fare_price}</ThemedText>
+                    </View>
+                  </View>
+                ))}
+              </View>
+              <ThemedButton onPress={handleDestinatoinConfirm}>
+                <ThemedText variant="title" style={{ textAlign: 'center' }}>
+                  Confirm destination
+                </ThemedText>
+              </ThemedButton>
+            </View>
+          </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
+      </View>
+    </RideLayout>
   );
 };
 
@@ -175,10 +277,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  mapContainer:{
+  mapContainer: {
     flex: 1,
-    height: "100%",
-    width:"100%",
-    borderWidth: 1
-  }
+    height: '100%',
+    width: '100%',
+    borderWidth: 1,
+  },
+
+  
 });

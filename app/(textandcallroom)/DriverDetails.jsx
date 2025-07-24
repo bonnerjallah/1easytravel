@@ -196,7 +196,6 @@ const DriverDetails = () => {
                       <View style={{flexDirection:"row", columnGap:5, marginTop:10}}>
                         <Ionicons name='star' size={15} color={themed.tabIconColor} />
                         <Ionicons name='star' size={15} color={themed.tabIconColor} />
-                        <Ionicons name='star' size={15} color={themed.tabIconColor} />
                       </View>
                     </View>
                   </View>

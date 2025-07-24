@@ -53,6 +53,8 @@ const icons = {
   trips: require('../assets/icons/trips.png'),
   www: require('../assets/icons/www.png'),
   x: require('../assets/icons/x.png'),
+  car3: require('../assets/icons/car3.png'),
+  car1: require('../assets/icons/car1.png'),
 };
 
 export default icons;

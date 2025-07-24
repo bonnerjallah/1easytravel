@@ -1,24 +1,30 @@
 import { StyleSheet, Image, View, useColorScheme, ImageBackground } from 'react-native'
 import * as Location from 'expo-location';
+import { router } from 'expo-router'
 
 
+//UI COMPONENTS
 import ThemedView from '../../components/ThemedView'
 import ThemedText from '../../components/ThemedText'
 import Spacer from '../../components/Spacer'
 import ThemedButton from '../../components/ThemedButton'
 import { Colors } from '../../constant/Colors'
-
-
 import images from "../../constant/images"
-import { router } from 'expo-router'
 
-
+//STATE MANAGEMENT
 import { useSetAtom } from 'jotai'
-import { userLocationAtom } from '../../atoms/locationAtoms';
+import { userLocationAtom, userAddressAtom } from '../../atoms/locationAtoms';
+import { useEffect } from 'react';
+
+//env
+import { EXPO_PUBLIC_GEOAPIFY_API_KEY } from '@env';
+
+
 
 const GetLocation = () => {
 
     const setLocation = useSetAtom(userLocationAtom);
+    
 
     const colorScheme = useColorScheme()
     const themed = Colors[colorScheme] ?? Colors.light
@@ -50,6 +56,10 @@ const GetLocation = () => {
             Alert.alert("Error", "Could not fetch location")
         }
     }
+
+    
+
+
     
 
   return (

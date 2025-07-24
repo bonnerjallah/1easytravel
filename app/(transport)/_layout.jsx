@@ -8,18 +8,18 @@ import { useEffect } from "react";
 
 export default () => {
 
-    useEffect(() => {
-        const unsub = getAuth().onAuthStateChanged((firebaseUser) => {
-            if(!firebaseUser) router.replace("/Login")
-        })
-        unsub()
-    }, [])
-    
-    return (
-        <>
-            <StatusBar style="auto"/>
-            <Stack screenOptions={{headerShown: false, animation: "none"}}/>
-        </>   
-    )
+  useEffect(() => {
+      const unsub = getAuth().onAuthStateChanged((firebaseUser) => {
+          if(!firebaseUser) router.replace("/Login")
+      })
+      unsub()
+  }, [])
+  
+  return (
+      <>
+          <StatusBar style="auto"/>
+          <Stack screenOptions={{headerShown: false, animation: "none"}}/>
+      </>   
+  )
    
 }

@@ -1,6 +1,6 @@
 import { FlatList, StyleSheet, useColorScheme, View, Image, Text } from 'react-native'
 import Modal from 'react-native-modal'
-import { useState } from 'react';
+import {useState, useEffect } from 'react';
 
 
 // UI
@@ -10,13 +10,10 @@ import { Colors } from '../constant/Colors'
 import BackButton from './Backbutton'
 import Spacer from './Spacer'
 
-//FIREBASE
-import { useAtomValue } from 'jotai';
-import { userLocationAtom } from '../atoms/locationAtoms';
-import {userAtoms} from "../atoms/userAtoms"
-
 //STATE MANAGEMENT
-import { useSetAtom } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { userLocationAtom, userPickUpLocation } from '../atoms/locationAtoms';
+import {userAtoms} from "../atoms/userAtoms"
 import { destinationAtom } from '../atoms/destinationAtoms';
 
 
@@ -33,14 +30,18 @@ import { EXPO_PUBLIC_GOOGLE_API_KEY } from '@env';
 
 
 
+
 const WhereToModal = ({ isVisible, onClose }) => {
 
   const colorScheme = useColorScheme()
   const themed = Colors[colorScheme] ?? Colors.light
 
   const user = useAtomValue(userAtoms)
-  const userLocationAddress = useAtomValue(userLocationAtom)
+  const userLocation = useAtomValue(userLocationAtom)
   const setUserDestination = useSetAtom(destinationAtom)
+  const setAddress = useSetAtom(userPickUpLocation);
+  const userAddress = useAtomValue(userPickUpLocation);
+
 
   const [loading, setLoading] = useState(false)
   const [destination, setDestination] = useState('');
@@ -50,7 +51,35 @@ const WhereToModal = ({ isVisible, onClose }) => {
 
   const userRecentTrips = trips.slice(0, 3)
 
-  
+  useEffect(() => {
+    const fetchAddress = async () => {
+      try {
+        const response = await fetch(`https://api.geoapify.com/v1/geocode/reverse?lat=${userLocation.latitude}&lon=${userLocation.longitude}&format=json&apiKey=${EXPO_PUBLIC_GEOAPIFY_API_KEY}`);
+
+        const data = await response.json();
+
+        if (data && Array.isArray(data.results) && data.results.length > 0) {
+          if (data.results[0].formatted) {
+            setAddress(data.results[0].formatted);
+          } else {
+            console.log("No 'formatted' property in the first result");
+          }
+        } else {
+          console.log("No results array or empty results");
+        }
+      } catch (error) {
+        console.error("Reverse Geocoding Error:", error);
+      }
+    };
+
+
+    if (userLocation.latitude && userLocation.longitude) {
+        fetchAddress();
+    }
+  }, [userLocation]);
+
+
+
 
   //Get miles helper function
   const getDistanceInMiles = (lat1, lon1, lat2, lon2) => {
@@ -139,7 +168,7 @@ const WhereToModal = ({ isVisible, onClose }) => {
 
           <View style={{width:'100%', rowGap: 10}}>
             <ThemedTextInput
-              placeholder={loading ?"loading" : user.address}
+              placeholder={loading ?"loading" : userAddress} 
               style={{borderWidth: 0, borderRadius:5, width:"95%", height: 50, backgroundColor:"lightgray"}}
             />
             <ThemedTextInput 

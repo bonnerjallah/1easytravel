@@ -129,8 +129,9 @@ export const driversDetails = [
     role: "Driver",
     phone: "+231776000000",
     rating: "4.80",
-    latitude: 6.300774,
-    longitude: -10.797160,
+    latitude: 6.318530,
+    longitude: -10.807472,
+    driverCar: images.truck
   },
   {
     driver_id: 2,
@@ -141,8 +142,9 @@ export const driversDetails = [
     role: "Driver",
     phone: "+231776000000",
     rating: "3.80",
-    latitude: 6.302921,
-    longitude: -10.796421,
+    latitude: 6.317211,
+    longitude: -10.806825,
+    driverCar: images.daco
   },
   {
     driver_id: 3,
@@ -152,9 +154,47 @@ export const driversDetails = [
     location: "Montserrado, Monrovia, Liberia",
     role: "Driver",
     rating: "5.00",
-    latitude: 6.294977,
-    longitude:-10.788350,
-  }
+    latitude: 6.319855,
+    longitude:-10.805817,
+    driverCar: images.top
+  },
+  {
+  driver_id: 4,
+  profilePic: images.profileImage4,
+  name: "David Mensah",
+  email: "davidmensah@gmail.com",
+  location: "Bong County, Liberia",
+  role: "Driver",
+  rating: "4.85",
+  latitude:6.313450,
+  longitude: -10.808136,
+  driverCar: images.top
+},
+{
+  driver_id: 5,
+  profilePic: images.profileImage4,
+  name: "Grace Johnson",
+  email: "gracejohnson@gmail.com",
+  location: "Nimba County, Liberia",
+  role: "Driver",
+  rating: "4.92",
+  latitude:6.292978,
+  longitude:-10.772108,
+  driverCar: images.truck
+},
+{
+  driver_id: 6,
+  profilePic: images.profileImage4,
+  name: "Samuel Conteh",
+  email: "samuelconteh@gmail.com",
+  location: "Lofa County, Liberia",
+  role: "Driver",
+  rating: "4.78",
+  latitude:6.287819,
+  longitude:-10.769834,
+  driverCar: images.daco
+}
+
 ];
 
 
