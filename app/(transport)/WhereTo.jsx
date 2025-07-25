@@ -3,9 +3,7 @@ import { useState, useEffect } from 'react';
 import { router } from 'expo-router';
 
 // COMPONENTS
-import ThemedView from '../../components/ThemedView';
 import { Colors } from '../../constant/Colors';
-import BackButton from '../../components/Backbutton';
 import Spacer from '../../components/Spacer';
 import ThemedText from '../../components/ThemedText';
 import { Ionicons } from '@expo/vector-icons';
@@ -16,7 +14,6 @@ import ThemedTextInput from '../../components/ThemedTextInput';
 //STATE MANAGEMENT
 import { useAtomValue, useSetAtom } from 'jotai';
 import { userLocationAtom, userPickUpLocation } from '../../atoms/locationAtoms';
-import {userAtoms} from "../../atoms/userAtoms"
 import { destinationAtom } from '../../atoms/destinationAtoms';
 
 
@@ -26,19 +23,23 @@ import { EXPO_PUBLIC_GEOAPIFY_API_KEY } from '@env';
 //MOCK DATA
 import { trips } from '../../mockUpData/messagesdata';
 
+//LIB
+import { reverseGeocode } from '../../lib/map';
+import {addressToCoord} from "../../lib/map"
+
 
 
 
 const WhereTo = () => {
 
-
-  const user = useAtomValue(userAtoms)
-  const userLocation = useAtomValue(userLocationAtom)
   const setUserDestination = useSetAtom(destinationAtom)
-  const setAddress = useSetAtom(userPickUpLocation);
-  const userAddress = useAtomValue(userPickUpLocation);
+  const setPickUpLocation = useSetAtom(userPickUpLocation);
 
+  const userLocation = useAtomValue(userLocationAtom)
+  const pickUpLocation = useAtomValue(userPickUpLocation);
+  
   const [destination, setDestination] = useState('');
+  const [loading, setLoading] = useState(false)
 
   const apikey = EXPO_PUBLIC_GEOAPIFY_API_KEY;
 
@@ -47,37 +48,27 @@ const WhereTo = () => {
 
   const userRecentTrips = trips.slice(0, 3);
 
-  const [loading, setLoading] = useState(false)
 
-
-
-  // Reverse Geocoding to get address from user location
+  // Reverse to get address
   useEffect(() => {
-      const fetchAddress = async () => {
-        try {
-          const response = await fetch(`https://api.geoapify.com/v1/geocode/reverse?lat=${userLocation.latitude}&lon=${userLocation.longitude}&format=json&apiKey=${EXPO_PUBLIC_GEOAPIFY_API_KEY}`);
-  
-          const data = await response.json();
-  
-          if (data && Array.isArray(data.results) && data.results.length > 0) {
-            if (data.results[0].formatted) {
-              setAddress(data.results[0].formatted);
-            } else {
-              console.log("No 'formatted' property in the first result");
-            }
-          } else {
-            console.log("No results array or empty results");
-          }
-        } catch (error) {
-          console.error("Reverse Geocoding Error:", error);
-        }
-      };
-  
-  
+    const getAddress = async () => {
       if (userLocation.latitude && userLocation.longitude) {
-          fetchAddress();
+        const address = await reverseGeocode(
+          userLocation.latitude,
+          userLocation.longitude,
+          apikey
+        );
+        if (address) {
+          setPickUpLocation(address);
+          console.log("real send address", address)
+        }
       }
-    }, [userLocation]);
+    };
+
+    getAddress();
+  }, [userLocation]);
+
+  
   
 
   // Helper to calculate miles between two points
@@ -91,8 +82,8 @@ const WhereTo = () => {
     const a =
       Math.sin(dLat / 2) ** 2 +
       Math.cos(toRad(lat1)) *
-        Math.cos(toRad(lat2)) *
-        Math.sin(dLon / 2) ** 2;
+      Math.cos(toRad(lat2)) *
+      Math.sin(dLon / 2) ** 2;
 
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
@@ -105,42 +96,19 @@ const WhereTo = () => {
 
   const mapUrl = `https://maps.geoapify.com/v1/staticmap?style=osm-bright-smooth&width=600&height=400&center=lonlat:${lng},${lat}&zoom=14&apiKey=${apikey}`;
 
-
-  // Function to get coordinates from address using Geoapify API
-  const getCoordinates = async (address) => {
-    const apiKey = EXPO_PUBLIC_GEOAPIFY_API_KEY;
-    // Ensure the query includes Monrovia, Liberia for better local accuracy
-    let adjustedAddress = address.trim();
-
-    if (!adjustedAddress.toLowerCase().includes("liberia")) {
-      adjustedAddress += ", Monrovia Liberia";
-    }
-    const encodedAddress = encodeURIComponent(adjustedAddress);
-    const url = `https://api.geoapify.com/v1/geocode/search?text=${encodedAddress}&apiKey=${apiKey}`;
-
-    const response = await fetch(url);
-    const data = await response.json();
-    console.log("Geocoding response data:", data); // Debug log
-
-    if (data.features && data.features.length > 0) {
-      const [lon, lat] = data.features[0].geometry.coordinates;
-        return { lat, lon };
-      } else {
-        return null;
-    }
-  };
+  
 
   // Handle destination confirmation
-  const handleDestinatoinConfirm = () => {
-    if (!destination.trim()) return;
+    const handleDestinatoinConfirm = () => {
+      if (!destination.trim()) return;
+
       setLoading(true);
-      getCoordinates(destination)
+      addressToCoord(destination, apikey)
         .then((coords) => {
           setLoading(false);
 
           if (coords) {
             setUserDestination(coords);
-            console.log("Destination Coordinates:", coords);
             router.push("/(transport)/ConfirmRide");
           } else {
             alert("Location not found");
@@ -151,12 +119,12 @@ const WhereTo = () => {
           console.error("Error fetching coordinates:", error);
           alert("Error fetching location");
         });
-  }
+    }
   
 
   return (
-    <RideLayout snapPoints={['35%', '85%']} index={1}>
-      <View style={{ flex: 1 }}>
+    <RideLayout snapPoints={['25%', '75%']} index={1}>
+      <View style={{ flex: 1, paddingBottom: 100 }}>
         <KeyboardAvoidingView
           style={{ flex: 1 }}
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -169,55 +137,56 @@ const WhereTo = () => {
               </ThemedText>
 
             <View style={{flexDirection:"row", borderWidth: 1, height: 120, alignItems:"center", padding: 10, borderRadius: 5}}>
+
               <View style={{justifyContent:"center",alignItems:"center"}}>
                 <Ionicons name='stop-circle' />
                 <View style={{
-                    width: 1,
-                    height: 35, 
-                    backgroundColor: 'gray',
-                    marginVertical: 7,
-                  }} />            
-                  <Ionicons name = "stop" />
+                  width: 1,
+                  height: 35, 
+                  backgroundColor: 'gray',
+                  marginVertical: 7,
+                }} />            
+                <Ionicons name = "stop" />
               </View>
 
-            <Spacer width={10}/>
+              <Spacer width={10}/>
 
-            <View style={{width:'100%', rowGap: 10}}>
-              <ThemedTextInput
-                placeholder={loading ?"loading" : userAddress} 
-                style={{borderWidth: 0, borderRadius:5, width:"95%", height: 50, backgroundColor:"lightgray"}}
-              />
-              <ThemedTextInput 
-                placeholder="Where to?"
-                returnKeyType="done"
-                blurOnSubmit={true}
-                value={destination}
-                onChangeText={setDestination}
-                onSubmitEditing={async () => {
-                  if (!destination.trim()) return;
-                    setLoading(true);
-                    const coords = await getCoordinates(destination);
-                    setLoading(false);
+              <View style={{width:'100%', rowGap: 10}}>
+                <ThemedTextInput
+                  placeholder={loading ?"loading" : pickUpLocation} 
+                  style={{borderWidth: 0, borderRadius:5, width:"95%", height: 50,  backgroundColor: themed.inputBackground}}
+                  value={pickUpLocation}
+                  onChangeText={setPickUpLocation}
+                />
+                <ThemedTextInput 
+                  placeholder="Where to?"
+                  returnKeyType="done"
+                  blurOnSubmit={true}
+                  value={destination}
+                  onChangeText={setDestination}
+                  onSubmitEditing={async () => {
+                    if (!destination.trim()) return;
+                      setLoading(true);
+                      const coords = await addressToCoord(destination, apikey);
+                      setLoading(false);
 
-                    if (coords) {
-                      setUserDestination(coords);
-                      console.log("Destination Coordinates:", coords);
-                      onClose();
-                    } else {
-                      alert("Location not found");
-                    }
-                }}
-                style={{
-                  borderWidth: 0,
-                  borderRadius: 5,
-                  width: "95%",
-                  height: 50,
-                  backgroundColor: "lightgray"
-                }}
-              />
+                      if (coords) {
+                        setUserDestination(coords);
+                      } else {
+                        alert("Location not found");
+                      }
+                  }}
+                  style={{
+                    borderWidth: 0,
+                    borderRadius: 5,
+                    width: "95%",
+                    height: 50,
+                    backgroundColor: themed.inputBackground                  
+                  }}
+                />
+              </View>
             </View>
-        </View>
-              <ThemedText style={{ fontWeight: 'bold', marginVertical: 10 }} variant='title' title >
+              <ThemedText style={{ marginVertical: 10 }} variant='title' title >
                 Recent Destinations
               </ThemedText>
 
@@ -256,8 +225,11 @@ const WhereTo = () => {
                   </View>
                 ))}
               </View>
+
+              <Spacer height={60}/>
+
               <ThemedButton onPress={handleDestinatoinConfirm}>
-                <ThemedText variant="title" style={{ textAlign: 'center' }}>
+                <ThemedText variant="title" style={{ textAlign: 'center', color: themed.buttontitle }}>
                   Confirm destination
                 </ThemedText>
               </ThemedButton>
@@ -271,18 +243,4 @@ const WhereTo = () => {
 
 export default WhereTo;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  mapContainer: {
-    flex: 1,
-    height: '100%',
-    width: '100%',
-    borderWidth: 1,
-  },
-
-  
-});
+const styles = StyleSheet.create({});

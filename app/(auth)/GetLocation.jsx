@@ -12,18 +12,17 @@ import { Colors } from '../../constant/Colors'
 import images from "../../constant/images"
 
 //STATE MANAGEMENT
-import { useSetAtom } from 'jotai'
-import { userLocationAtom, userAddressAtom } from '../../atoms/locationAtoms';
-import { useEffect } from 'react';
+import { useSetAtom} from 'jotai'
+import { userLocationAtom} from '../../atoms/locationAtoms';
 
-//env
-import { EXPO_PUBLIC_GEOAPIFY_API_KEY } from '@env';
+
 
 
 
 const GetLocation = () => {
 
     const setLocation = useSetAtom(userLocationAtom);
+   
     
 
     const colorScheme = useColorScheme()

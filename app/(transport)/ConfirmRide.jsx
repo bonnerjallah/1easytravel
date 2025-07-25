@@ -1,24 +1,31 @@
 import { Image, StyleSheet, Text, TouchableOpacity, useColorScheme, View } from 'react-native'
-import { useMemo } from 'react';
+import { router } from 'expo-router';
+import { useMemo, useEffect, useState } from 'react';
+import { Ionicons } from '@expo/vector-icons';
+
 
 // COMPONENT
 import RideLayout from '../../components/RideLayout'
 import { Colors } from '../../constant/Colors';
+import icons from '../../constant/icons';
+import ThemedText from '../../components/ThemedText';
+import ThemedView from '../../components/ThemedView';
+import Spacer from '../../components/Spacer';
 
 
 //State Management
-import { useAtomValue } from 'jotai'
-import { destinationAtom } from '../../atoms/destinationAtoms'
-import { userLocationAtom } from '../../atoms/locationAtoms'
+import { useSetAtom } from 'jotai'
+import { selectedDriverAtom } from '../../atoms/selectedDriverAtoms';
 
 //Mock Data
 import { driversDetails } from '../../mockUpData/messagesdata'
-import { useEffect, useState } from 'react'
+
 
 // Utils
 import { getDistance } from '../../lib/map'; // adjust path as needed
-import ThemedText from '../../components/ThemedText';
-import Spacer from '../../components/Spacer';
+
+//API KEY
+import { EXPO_PUBLIC_GEOAPIFY_API_KEY } from '@env';
 
 
 
@@ -28,14 +35,9 @@ const ConfirmRide = () => {
 
   const [nearbyDrivers, setNearbyDrivers] = useState(null)
 
+  const setSelectedDriver = useSetAtom(selectedDriverAtom);
 
-  const destination = useAtomValue(destinationAtom)
-  const userLocation = useAtomValue(userLocationAtom)
-
-  console.log("Destination in ConfirmRide:", destination)
-  console.log("User Location in ConfirmRide:", userLocation)
-
-
+  const apiKey = EXPO_PUBLIC_GEOAPIFY_API_KEY;
 
   
   // Mock location if user location is not available
@@ -45,12 +47,10 @@ const ConfirmRide = () => {
   const userMockLng = parseFloat(lng);
 
   // Remember to change this to userLocation from atom
-    const userPoint = useMemo(() => ({
-      latitude: userMockLat,
-      longitude: userMockLng,
-    }), [userMockLat, userMockLng]);
-
-
+  const userPoint = useMemo(() => ({
+    latitude: userMockLat,
+    longitude: userMockLng,
+  }), [userMockLat, userMockLng]);
 
 
   // Function to get closest drivers within 10 miles (approximately 16.09 kilometers)
@@ -58,6 +58,7 @@ const ConfirmRide = () => {
   const radiusInMiles = 10;
   const radiusInKm = radiusInMiles * MILES_TO_KM; // ≈ 16.0934 km
 
+  //Get closest driver
   const getClosestDrivers = () => {
     const driversWithin10Miles = driversDetails.filter(driver => {
       const distance = getDistance(
@@ -70,42 +71,82 @@ const ConfirmRide = () => {
     });
 
     setNearbyDrivers(driversWithin10Miles);
-    console.log("Nearby Drivers:", driversWithin10Miles);
   };
   useEffect(() => {
     getClosestDrivers()
   }, [])
 
+  
+  //Stars Render
+  const renderStars = (rating) => {
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+
+    return (
+      <View style={{ flexDirection: 'row' }}>
+        {Array.from({ length: fullStars }, (_, i) => (
+          <Ionicons key={`full-${i}`} name="star" size={16}  color={themed.tabIconColor} />
+        ))}
+        {hasHalfStar && (
+          <Ionicons name="star-half" size={16}  color={themed.tabIconColor}/>
+        )}
+        {Array.from({ length: emptyStars }, (_, i) => (
+          <Ionicons key={`empty-${i}`} name="star-outline" size={16}  color={themed.tabIconColor} />
+        ))}
+      </View>
+    );
+  };
+
   return (
-    <RideLayout snapPoints={['50%', '85%']} index={1}>
-      <ThemedText variant='title' title>ConfirmRide</ThemedText>
-      <Spacer size={5} />
-      {nearbyDrivers && nearbyDrivers.length > 0 ? (
-        nearbyDrivers.slice(0, 5).map(driver => ( 
-          <TouchableOpacity key={driver.driver_id} style={{ marginBottom: 20,  justifyContent:"space-between", flexDirection: 'row', alignItems: 'center', columnGap:10}}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', columnGap: 10}}>
-              <Image source={driver.profilePic} style={{ width: 50, height: 50, borderRadius: 25 }} />
-              <View>
-                <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{driver.name}</Text>
-                <Text>Rating: {driver.rating}</Text>
-                <Text>
-                  Distance: {getDistance(
-                  userPoint.latitude,
-                  userPoint.longitude,
-                  driver.latitude,
-                  driver.longitude
-                ).toFixed(2)} km
-                </Text>
+    <RideLayout snapPoints={["25%",'55%']} index={1}>
+      <ThemedView style={{padding: 10}}>
+        <ThemedText variant='title' title>Select Driver</ThemedText>
+        <Spacer size={5} />
+        {nearbyDrivers && nearbyDrivers.length > 0 ? (
+          nearbyDrivers.slice(0, 5).map(driver => ( 
+            <TouchableOpacity key={driver.driver_id} style={{ marginBottom: 20,  justifyContent:"space-between", flexDirection: 'row', alignItems: 'center', columnGap:10,
+              borderBottomWidth: 0.5, paddingBottom:10
+            }}
+            onPress={() => {
+              setSelectedDriver(driver);
+              router.push("(transport)/BookRide")
+            }}
+            >
+              <View style={{ flexDirection: 'row', alignItems: 'center', columnGap: 10}}>
+                <Image source={driver.profilePic} style={{ width: 50, height: 50, borderRadius: 25 }} />
+                <View>
+                  <ThemedText style={{ fontSize: 16, fontWeight: 'bold' }}>{driver.name}</ThemedText>
+                  <ThemedText style={{alignItems:"center", }}>Rating:{renderStars(Number(driver.rating))}</ThemedText>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', columnGap: 10, marginTop: 5 }}>
+                    <ThemedText style={{borderRightWidth: 1, paddingRight: 10}}>
+                      Distance: {getDistance(
+                      userPoint.latitude,
+                      userPoint.longitude,
+                      driver.latitude,
+                      driver.longitude
+                    ).toFixed(2)} km
+                    </ThemedText>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', columnGap: 2, justifyContent: 'center'}}>
+                      <Image source={icons.dollarsign} style={{ width: 25, height: 25, marginLeft: 5, padding: 1,  tintColor: themed.tabIconColor, backgroundColor:"yellow", borderRadius:10  }} />
+                      <ThemedText>
+                        Price: ${driver.driverCar.price.toFixed(2)}
+                      </ThemedText>
+                    </View>
+                  </View>
+                
+                </View>
               </View>
-            </View>
-            
-            <Image source={driver.driverCar} style={{ width: 60, height: 20,  }} />
-            
-          </TouchableOpacity>
-        ))
-      ) : (
-        <Text>No drivers available within 5 miles.</Text>
-      )}
+              
+              <Image source={driver.driverCar.image} style={{ width: 60, height: 20, position:"absolute", bottom:15, right: 1  }} />
+              
+            </TouchableOpacity>
+          ))
+        ) : (
+          <Text>No drivers available within 5 miles.</Text>
+        )}
+      </ThemedView>
+      
     </RideLayout>
     
   )

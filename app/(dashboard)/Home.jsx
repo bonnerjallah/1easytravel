@@ -12,7 +12,7 @@ import Spacer from '../../components/Spacer';
 
 
 // State Management
-import { useSetAtom } from 'jotai';
+import { useSetAtom} from 'jotai';
 import { userLocationAtom } from '../../atoms/locationAtoms';
 
 // SubComponents
@@ -24,6 +24,7 @@ import Eats from '../../components/Eats';
 const Home = ({}) => {
 
   const setLocation = useSetAtom(userLocationAtom);
+
   const [showEats, setShowEats] = useState(false)
 
   const colorScheme = useColorScheme()

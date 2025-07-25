@@ -29,7 +29,7 @@ export const Colors = {
     danger: '#FF453A',
     success: '#30D158',
     title: '#6c757d',
-    text: 'white',
+    text: '#74c69d',
     inputText: "black",
     subtext: '#8E8E93',
     border: '#3A3A3C',

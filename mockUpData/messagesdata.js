@@ -131,7 +131,10 @@ export const driversDetails = [
     rating: "4.80",
     latitude: 6.318530,
     longitude: -10.807472,
-    driverCar: images.truck
+    driverCar: {
+      image:images.truck, 
+      price: 4.50
+    }
   },
   {
     driver_id: 2,
@@ -144,7 +147,10 @@ export const driversDetails = [
     rating: "3.80",
     latitude: 6.317211,
     longitude: -10.806825,
-    driverCar: images.daco
+    driverCar: {
+      image: images.daco,
+      price: 5.00,
+    }
   },
   {
     driver_id: 3,
@@ -156,19 +162,25 @@ export const driversDetails = [
     rating: "5.00",
     latitude: 6.319855,
     longitude:-10.805817,
-    driverCar: images.top
+    driverCar: {
+      image: images.top,
+      price: 3.75
+    }
   },
   {
   driver_id: 4,
-  profilePic: images.profileImage4,
+  profilePic: images.profileImage1,
   name: "David Mensah",
   email: "davidmensah@gmail.com",
   location: "Bong County, Liberia",
   role: "Driver",
-  rating: "4.85",
+  rating: "2.85",
   latitude:6.313450,
   longitude: -10.808136,
-  driverCar: images.top
+  driverCar: {
+    image:images.top, 
+    price: 4.25
+  }
 },
 {
   driver_id: 5,
@@ -180,7 +192,9 @@ export const driversDetails = [
   rating: "4.92",
   latitude:6.292978,
   longitude:-10.772108,
-  driverCar: images.truck
+  driverCar: {
+    image:images.truck, 
+    price: 5.50}
 },
 {
   driver_id: 6,
@@ -189,10 +203,12 @@ export const driversDetails = [
   email: "samuelconteh@gmail.com",
   location: "Lofa County, Liberia",
   role: "Driver",
-  rating: "4.78",
+  rating: "3.78",
   latitude:6.287819,
   longitude:-10.769834,
-  driverCar: images.daco
+  driverCar: {
+    image:images.daco, 
+    price: 4.80}
 }
 
 ];

@@ -24,7 +24,7 @@ import { EXPO_PUBLIC_GEOAPIFY_API_KEY } from '@env';
 // UTILS FUNCTIONS
 import { generateMarkers, UserMarker, UserDestinationMarker } from '../lib/map';
 
-const RideLayout = ({ children, snapPoints = ['30%', '75%'], index = 1 }) => {
+const RideLayout = ({ children, snapPoints, index  }) => {
   const colorScheme = useColorScheme();
   const themed = Colors[colorScheme] ?? Colors.light;
 
@@ -235,8 +235,8 @@ const RideLayout = ({ children, snapPoints = ['30%', '75%'], index = 1 }) => {
 
         <View style={styles.bottomSheetWrapper}>
           <BottomSheet ref={bottomSheetRef} snapPoints={snapPoints} index={index}>
-            <BottomSheetScrollView style={{ padding: 20 }}>
-              <View>{children}</View>
+            <BottomSheetScrollView >
+              <ThemedView>{children}</ThemedView>
             </BottomSheetScrollView>
           </BottomSheet>
         </View>
@@ -273,5 +273,6 @@ const styles = StyleSheet.create({
     right: 0,
     top: 0, // ensure it fills the screen
     elevation: 10, // Android support
+    
   },
 });

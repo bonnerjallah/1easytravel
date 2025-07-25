@@ -78,15 +78,13 @@ const Login = () => {
                 });
             }
 
-
-
             setEmail("")
             setPwd("")
 
             router.replace("/Home")
             
         } catch (error) {
-            console.log("Firebase error:", error); // 👈 Add this
+            console.log("Firebase error:", error); 
 
             const friendlyMessages = {
                 "auth/email-already-in-use": "Email is already in use.",
@@ -135,7 +133,7 @@ const Login = () => {
 
             <ThemedTextInput
                 placeholder = "Password"
-                style={{ backgroundColor: themed.inputBackground,}}
+                style={{ backgroundColor: themed.inputBackground}}
                 secureTextEntry
                 onChangeText = {setPwd}
                 value = {pwd}
