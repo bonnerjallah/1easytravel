@@ -11,11 +11,14 @@ import icons from '../../constant/icons';
 import ThemedText from '../../components/ThemedText';
 import ThemedView from '../../components/ThemedView';
 import Spacer from '../../components/Spacer';
+import images from '../../constant/images';
 
 
 //State Management
-import { useSetAtom } from 'jotai'
+import { useSetAtom, useAtomValue } from 'jotai'
 import { selectedDriverAtom } from '../../atoms/selectedDriverAtoms';
+import { userLocationAtom, userPickUpCoord, userPickUpLocation } from '../../atoms/locationAtoms';
+
 
 //Mock Data
 import { driversDetails } from '../../mockUpData/messagesdata'
@@ -24,8 +27,7 @@ import { driversDetails } from '../../mockUpData/messagesdata'
 // Utils
 import { getDistance } from '../../lib/map'; // adjust path as needed
 
-//API KEY
-import { EXPO_PUBLIC_GEOAPIFY_API_KEY } from '@env';
+
 
 
 
@@ -37,8 +39,10 @@ const ConfirmRide = () => {
 
   const setSelectedDriver = useSetAtom(selectedDriverAtom);
 
-  const apiKey = EXPO_PUBLIC_GEOAPIFY_API_KEY;
+  const pickUpAt = useAtomValue(userPickUpCoord)
+  const userLocation = useAtomValue(userLocationAtom);
 
+  
   
   // Mock location if user location is not available
   const lat = "6.319314";
@@ -46,11 +50,14 @@ const ConfirmRide = () => {
   const userMockLat = parseFloat(lat);
   const userMockLng = parseFloat(lng);
 
-  // Remember to change this to userLocation from atom
+  const userLat = pickUpAt?.lat ?? userLocation?.latitude ??  userMockLat;
+  const userLng = pickUpAt?.lon ?? userLocation?.longitude ?? userMockLng;
+
+
   const userPoint = useMemo(() => ({
-    latitude: userMockLat,
-    longitude: userMockLng,
-  }), [userMockLat, userMockLng]);
+    latitude: userLat,
+    longitude: userLng,
+  }), [userLat, userLng]);
 
 
   // Function to get closest drivers within 10 miles (approximately 16.09 kilometers)
@@ -76,7 +83,7 @@ const ConfirmRide = () => {
     getClosestDrivers()
   }, [])
 
-  
+
   //Stars Render
   const renderStars = (rating) => {
     const fullStars = Math.floor(rating);
@@ -108,10 +115,10 @@ const ConfirmRide = () => {
             <TouchableOpacity key={driver.driver_id} style={{ marginBottom: 20,  justifyContent:"space-between", flexDirection: 'row', alignItems: 'center', columnGap:10,
               borderBottomWidth: 0.5, paddingBottom:10
             }}
-            onPress={() => {
-              setSelectedDriver(driver);
-              router.push("(transport)/BookRide")
-            }}
+              onPress={() => {
+                setSelectedDriver(driver);
+                router.push("(transport)/PaymentOptions")
+              }}
             >
               <View style={{ flexDirection: 'row', alignItems: 'center', columnGap: 10}}>
                 <Image source={driver.profilePic} style={{ width: 50, height: 50, borderRadius: 25 }} />
@@ -139,14 +146,18 @@ const ConfirmRide = () => {
               </View>
               
               <Image source={driver.driverCar.image} style={{ width: 60, height: 20, position:"absolute", bottom:15, right: 1  }} />
+
               
             </TouchableOpacity>
           ))
         ) : (
-          <Text>No drivers available within 5 miles.</Text>
+          <ThemedView style={styles.emptyContainer}>
+            <ThemedText title>No drivers available within 10 miles.</ThemedText>
+            <Image source={images.tripScreenIcon} />
+          </ThemedView>
         )}
       </ThemedView>
-      
+        <Spacer height={210} />
     </RideLayout>
     
   )
@@ -154,4 +165,10 @@ const ConfirmRide = () => {
 
 export default ConfirmRide
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  emptyContainer:{
+    height:"400",
+    justifyContent:"center",
+    alignItems:"center"
+  }
+})

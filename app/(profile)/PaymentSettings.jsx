@@ -11,6 +11,8 @@ import Backbutton from "../../components/Backbutton";
 import icons from '../../constant/icons';
 import { Ionicons } from '@expo/vector-icons';
 
+import images from '../../constant/images';
+
 
 const PaymentSettings = () => {
 
@@ -39,7 +41,7 @@ const PaymentSettings = () => {
                     onPress={() => router.push('/(profile)/AddCreditCard')}
 
                 >
-                    <Image source={icons.creditCard} style={{ width: 24, height: 24, tintColor: "#778da9", }} />
+                    <Ionicons name='card-outline' size={35} color="#00a8e8"/>
                     <ThemedText>Add credit or debit card</ThemedText>
                     <Ionicons 
                         name='chevron-forward'
@@ -53,7 +55,7 @@ const PaymentSettings = () => {
             <View style={{rowGap: 5}}>
                 <ThemedText variant='title' title>More Payment options</ThemedText>
                 <TouchableOpacity style={styles.optionsWrapper}>
-                    <Image source={icons.momo} style={{ width: 24, height: 24, tintColor: "#ffd60a", }} />
+                    <Image source={images.momomoney} style={{ width: 34, height: 34, }} />
                     <ThemedText>Momo from MTN</ThemedText>
                     <Ionicons 
                         name='chevron-forward'
@@ -63,7 +65,7 @@ const PaymentSettings = () => {
                     />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.optionsWrapper}>
-                    <Image source={icons.orangeMoney} style={{ width: 34, height: 34, tintColor: "#f77f00" }} />
+                    <Image source={images.orange} style={{ width: 34, height: 34, }} />
                     <ThemedText>Orange Money</ThemedText>
                     <Ionicons 
                         name='chevron-forward'

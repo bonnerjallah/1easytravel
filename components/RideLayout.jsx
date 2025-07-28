@@ -1,7 +1,8 @@
-import { Text, StyleSheet, useColorScheme, View } from 'react-native';
+import { Text, StyleSheet, useColorScheme, View, Button } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import MapView, { Marker, Polyline, PROVIDER_DEFAULT } from 'react-native-maps';
+import MapViewDirections from "react-native-maps-directions"
 import { useEffect, useState, useRef, useMemo } from 'react';
 import { Hospital, Soup, Store, Drama, Landmark, Church, School, Flame } from 'lucide-react-native';
 
@@ -14,7 +15,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 // STATE MANAGEMENT
 import { useAtomValue, useSetAtom } from 'jotai';
-import { userLocationAtom } from '../atoms/locationAtoms';
+import { userLocationAtom, userPickUpCoord } from '../atoms/locationAtoms';
 import { driversDetails } from '../mockUpData/messagesdata';
 import { destinationAtom } from '../atoms/destinationAtoms';
 
@@ -22,7 +23,9 @@ import { destinationAtom } from '../atoms/destinationAtoms';
 import { EXPO_PUBLIC_GEOAPIFY_API_KEY } from '@env';
 
 // UTILS FUNCTIONS
-import { generateMarkers, UserMarker, UserDestinationMarker } from '../lib/map';
+import { generateMarkers, UserMarker, UserDestinationMarker, getDistance } from '../lib/map';
+
+
 
 const RideLayout = ({ children, snapPoints, index  }) => {
   const colorScheme = useColorScheme();
@@ -34,10 +37,13 @@ const RideLayout = ({ children, snapPoints, index  }) => {
   const [businesses, setBusinesses] = useState([]);
   const [routeCoords, setRouteCoords] = useState([]);
   const [prevPositions, setPrevPositions] = useState({});
-
+  
   const userLocation = useAtomValue(userLocationAtom);
   const userDestination = useAtomValue(destinationAtom);
   const setDestination = useSetAtom(destinationAtom);
+  const pickUpAt = useAtomValue(userPickUpCoord)
+
+  const apiKey = EXPO_PUBLIC_GEOAPIFY_API_KEY
 
   // Mock location if user location is not available
   const lat = "6.318464";
@@ -45,27 +51,24 @@ const RideLayout = ({ children, snapPoints, index  }) => {
   const userMockLat = parseFloat(lat);
   const userMockLng = parseFloat(lng);
 
-  // const userLat = userLocation?.latitude ?? userMockLat;
-  // const userLng = userLocation?.longitude ?? userMockLng;
 
-  // const userPoint = {
-  //   latitude: userLat,
-  //   longitude: userLng,
-  // };
+  const userLat = pickUpAt?.lat ?? userLocation?.latitude ??  userMockLat;
+  const userLng = pickUpAt?.lon ?? userLocation?.longitude ?? userMockLng;
 
-  // Remember to change this to userLocation from atom
+
   const userPoint = useMemo(() => ({
-    latitude: userMockLat,
-    longitude: userMockLng,
-  }), [userMockLat, userMockLng]);
+    latitude: userLat,
+    longitude: userLng,
+  }), [userLat, userLng]);
 
-  console.log("User Point:", userPoint);
 
   const destinationPoint = useMemo(() => (
   userDestination
     ? { latitude: userDestination.lat, longitude: userDestination.lon }
     : userPoint
   ), [userDestination, userPoint]);
+
+  
 
   const categoriesArray = [
     "catering.restaurant",
@@ -103,6 +106,8 @@ const RideLayout = ({ children, snapPoints, index  }) => {
     }
   };
 
+
+  //Get nearby bussiness
   const getNearbyPlaces = async (lat, lon, cat = category) => {
     const apiKey = EXPO_PUBLIC_GEOAPIFY_API_KEY;
     const radius = 80467.2; // meters
@@ -140,20 +145,23 @@ const RideLayout = ({ children, snapPoints, index  }) => {
   };
 
   useEffect(() => {
-    if (userMockLat && userMockLng) {
-      getNearbyPlaces(userMockLat, userMockLng)
+    if (userPoint?.latitude && userPoint?.longitude) {
+      getNearbyPlaces(userPoint.latitude,  userPoint.longitude)
         .then((data) => setBusinesses(data))
         .catch((err) => console.error("Error fetching nearby places:", err));
     }
-  }, [userMockLat, userMockLng]);
+  }, [userPoint]);
 
+  //Map region zoom
   useEffect(() => {
-    if (mapRef.current && userDestination) {
+    if (mapRef.current && userPoint && userDestination) {
+      const distance = getDistance(userPoint, userDestination)
+      const padding = distance < 100 ? 150 : 50
       const timeout = setTimeout(() => {
         mapRef.current.fitToCoordinates(
           [userPoint, destinationPoint],
           {
-            edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
+            edgePadding: { top: padding, right: padding, bottom: padding, left: padding },
             animated: true,
           }
         );
@@ -162,7 +170,6 @@ const RideLayout = ({ children, snapPoints, index  }) => {
       return () => clearTimeout(timeout); // Cleanup
     }
   }, [destinationPoint]);
-
 
   useEffect(() => {
     setPrevPositions((prev) => {
@@ -178,6 +185,66 @@ const RideLayout = ({ children, snapPoints, index  }) => {
     });
   }, [driversDetails]);
 
+  //Route drawing
+  const fetchRouteDirection = async () => {
+
+    if (
+      typeof pickUpAt?.lat !== "number" ||
+      typeof pickUpAt?.lon !== "number" ||
+      typeof userDestination?.lat !== "number" ||
+      typeof userDestination?.lon !== "number"
+    ) {
+      setLoading(false);
+      return;
+    }
+
+    const url = `https://api.geoapify.com/v1/routing?waypoints=${pickUpAt.lat},${pickUpAt.lon}|${userDestination.lat},${userDestination.lon}&mode=drive&apiKey=${apiKey}`;
+
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (!data?.features?.length) {
+        setLoading(false);
+        return;
+      }
+
+      let coords = data.features[0].geometry.coordinates;
+
+      // If geometry is a MultiLineString, unwrap it
+      if (
+        Array.isArray(coords) &&
+        Array.isArray(coords[0]) &&
+        Array.isArray(coords[0][0])
+      ) {
+        coords = coords[0];
+      }
+
+      const convertCoord = coords.map(([lon, lat]) => ({
+        latitude: lat,
+        longitude: lon,
+      }));
+
+      setRouteCoords(convertCoord);
+    } catch (error) {
+      if (isMounted) {
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      fetchRouteDirection(); 
+    }, 100); // delay a little to allow state update
+
+    return () => clearTimeout(timeout);
+  }, [userDestination, pickUpAt]);
+
+
+
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemedView style={styles.container} safe={true}>
@@ -185,7 +252,6 @@ const RideLayout = ({ children, snapPoints, index  }) => {
           <BackButton style={styles.backBttn} size={40} />
         </View>
 
-        <Text>Bottom of the layout</Text>
 
         <View style={StyleSheet.absoluteFillObject}>
           <MapView
@@ -229,7 +295,8 @@ const RideLayout = ({ children, snapPoints, index  }) => {
               </Marker>
             ))}
 
-            {generateMarkers(driversDetails, prevPositions)}
+            {generateMarkers(driversDetails, prevPositions, pickUpAt)}
+
           </MapView>
         </View>
 

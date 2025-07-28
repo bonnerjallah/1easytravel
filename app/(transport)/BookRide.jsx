@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Image, StyleSheet, Text, useColorScheme, View } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
+import { router } from 'expo-router'
 
 // Component
 import RideLayout from '../../components/RideLayout'
@@ -22,7 +23,6 @@ import { userPickUpLocation } from '../../atoms/locationAtoms'
 import { EXPO_PUBLIC_GEOAPIFY_API_KEY } from '@env';
 
 //LIB
-import { addressToCoord } from '../../lib/map';
 import { reverseGeocode } from '../../lib/map'
 
 
@@ -36,6 +36,7 @@ const BookRide = () => {
   const PickupLocation = useAtomValue(userPickUpLocation)
 
   const [coordToAddressText, setCoordToAddressText] = useState()
+  const [loading, setLoading] = useState(false)
 
 
   const apiKey = EXPO_PUBLIC_GEOAPIFY_API_KEY;
@@ -44,7 +45,6 @@ const BookRide = () => {
   useEffect(() => {
     const getCoordinates = async () => {
       if(destination.lat && destination.lon) {
-        console.log("desdes", destination)
         const coordinates = await reverseGeocode(
           destination.lat,
           destination.lon,
@@ -59,7 +59,15 @@ const BookRide = () => {
     getCoordinates()
   }, [destination])
 
-  console.log("addressssssss", coordToAddressText)
+  const handleRideBooking = async() => {
+    setLoading(true)
+    
+    if(yourDriver && PickupLocation && destination) {
+
+    }
+
+  }
+
 
 
   //Stars Array
@@ -141,9 +149,11 @@ const BookRide = () => {
                 </View>
             </ThemedView>
 
-            <ThemedButton >
+            <ThemedButton 
+              onPress={handleRideBooking}
+            >
               <ThemedText variant="title" style={{ textAlign: 'center', color: themed.buttontitle }}>
-                Confirm destination
+                Book Ride
               </ThemedText>
             </ThemedButton>
             

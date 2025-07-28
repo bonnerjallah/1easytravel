@@ -13,8 +13,9 @@ import ThemedTextInput from '../../components/ThemedTextInput';
 
 //STATE MANAGEMENT
 import { useAtomValue, useSetAtom } from 'jotai';
-import { userLocationAtom, userPickUpLocation } from '../../atoms/locationAtoms';
+import { userLocationAtom, userPickUpLocation, userPickUpCoord } from '../../atoms/locationAtoms';
 import { destinationAtom } from '../../atoms/destinationAtoms';
+
 
 
 //API KEY
@@ -37,9 +38,13 @@ const WhereTo = () => {
 
   const userLocation = useAtomValue(userLocationAtom)
   const pickUpLocation = useAtomValue(userPickUpLocation);
+  const setPickUpCoord = useSetAtom(userPickUpCoord)
+  const pickUpCoord = useAtomValue(userPickUpCoord) 
   
   const [destination, setDestination] = useState('');
   const [loading, setLoading] = useState(false)
+  const [pickUpText, setPickUpText] = useState(""); 
+  
 
   const apikey = EXPO_PUBLIC_GEOAPIFY_API_KEY;
 
@@ -60,7 +65,6 @@ const WhereTo = () => {
         );
         if (address) {
           setPickUpLocation(address);
-          console.log("real send address", address)
         }
       }
     };
@@ -68,9 +72,24 @@ const WhereTo = () => {
     getAddress();
   }, [userLocation]);
 
-  
-  
+  useEffect(() => {
+    const fetchCoordinates = async () => {
+      try {
+        if (pickUpLocation) {
+          const addressCoord = await addressToCoord(pickUpLocation, apikey);
+          if (addressCoord) {
+            setPickUpCoord(addressCoord);
+          }
+        }
+      } catch (err) {
+        console.error("Error in fetchCoordinates:", err);
+      }
+    };
 
+    fetchCoordinates();
+  }, [pickUpLocation]);
+    
+  
   // Helper to calculate miles between two points
   const getDistanceInMiles = (lat1, lon1, lat2, lon2) => {
     const toRad = (value) => (value * Math.PI) / 180;
@@ -97,9 +116,8 @@ const WhereTo = () => {
   const mapUrl = `https://maps.geoapify.com/v1/staticmap?style=osm-bright-smooth&width=600&height=400&center=lonlat:${lng},${lat}&zoom=14&apiKey=${apikey}`;
 
   
-
   // Handle destination confirmation
-    const handleDestinatoinConfirm = () => {
+  const handleDestinatoinConfirm = () => {
       if (!destination.trim()) return;
 
       setLoading(true);
@@ -119,8 +137,11 @@ const WhereTo = () => {
           console.error("Error fetching coordinates:", error);
           alert("Error fetching location");
         });
-    }
+  }
+
+
   
+
 
   return (
     <RideLayout snapPoints={['25%', '75%']} index={1}>
@@ -136,56 +157,61 @@ const WhereTo = () => {
                 Set your destination
               </ThemedText>
 
-            <View style={{flexDirection:"row", borderWidth: 1, height: 120, alignItems:"center", padding: 10, borderRadius: 5}}>
+              <View style={{flexDirection:"row", borderWidth: 1, height: 120, alignItems:"center", padding: 10, borderRadius: 5}}>
 
-              <View style={{justifyContent:"center",alignItems:"center"}}>
-                <Ionicons name='stop-circle' />
-                <View style={{
-                  width: 1,
-                  height: 35, 
-                  backgroundColor: 'gray',
-                  marginVertical: 7,
-                }} />            
-                <Ionicons name = "stop" />
-              </View>
+                <View style={{justifyContent:"center",alignItems:"center"}}>
+                  <Ionicons name='stop-circle' />
+                  <View style={{
+                    width: 1,
+                    height: 35, 
+                    backgroundColor: 'gray',
+                    marginVertical: 7,
+                  }} />            
+                  <Ionicons name = "stop" />
+                </View>
 
-              <Spacer width={10}/>
+                <Spacer width={10}/>
 
-              <View style={{width:'100%', rowGap: 10}}>
-                <ThemedTextInput
-                  placeholder={loading ?"loading" : pickUpLocation} 
-                  style={{borderWidth: 0, borderRadius:5, width:"95%", height: 50,  backgroundColor: themed.inputBackground}}
-                  value={pickUpLocation}
-                  onChangeText={setPickUpLocation}
-                />
-                <ThemedTextInput 
-                  placeholder="Where to?"
-                  returnKeyType="done"
-                  blurOnSubmit={true}
-                  value={destination}
-                  onChangeText={setDestination}
-                  onSubmitEditing={async () => {
-                    if (!destination.trim()) return;
-                      setLoading(true);
-                      const coords = await addressToCoord(destination, apikey);
-                      setLoading(false);
-
-                      if (coords) {
-                        setUserDestination(coords);
-                      } else {
-                        alert("Location not found");
+                <View style={{width:'100%', rowGap: 10}}>
+                  <ThemedTextInput
+                    placeholder={loading ?"loading" : pickUpLocation} 
+                    style={{borderWidth: 0, borderRadius:5, width:"95%", height: 50,  backgroundColor: themed.inputBackground}}
+                    value={pickUpText}
+                    onChangeText={setPickUpText}
+                    onEndEditing={() => {
+                      if(pickUpText.trim()) {
+                        setPickUpLocation(pickUpText)
                       }
-                  }}
-                  style={{
-                    borderWidth: 0,
-                    borderRadius: 5,
-                    width: "95%",
-                    height: 50,
-                    backgroundColor: themed.inputBackground                  
-                  }}
-                />
+                    }}
+                  />
+                  <ThemedTextInput 
+                    placeholder="Where to?"
+                    returnKeyType="done"
+                    blurOnSubmit={true}
+                    value={destination}
+                    onChangeText={setDestination}
+                    onSubmitEditing={async () => {
+                      if (!destination.trim()) return;
+                        setLoading(true);
+                        const coords = await addressToCoord(destination, apikey);
+                        setLoading(false);
+
+                        if (coords) {
+                          setUserDestination(coords);
+                        } else {
+                          alert("Location not found");
+                        }
+                    }}
+                    style={{
+                      borderWidth: 0,
+                      borderRadius: 5,
+                      width: "95%",
+                      height: 50,
+                      backgroundColor: themed.inputBackground                  
+                    }}
+                  />
+                </View>
               </View>
-            </View>
               <ThemedText style={{ marginVertical: 10 }} variant='title' title >
                 Recent Destinations
               </ThemedText>
@@ -226,7 +252,7 @@ const WhereTo = () => {
                 ))}
               </View>
 
-              <Spacer height={60}/>
+                <Spacer width={10}/>
 
               <ThemedButton onPress={handleDestinatoinConfirm}>
                 <ThemedText variant="title" style={{ textAlign: 'center', color: themed.buttontitle }}>
