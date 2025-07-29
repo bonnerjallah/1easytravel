@@ -27,7 +27,7 @@ import { generateMarkers, UserMarker, UserDestinationMarker, getDistance } from 
 
 
 
-const RideLayout = ({ children, snapPoints, index  }) => {
+const RideLayout = ({ children, snapPoints, index, onClose  }) => {
   const colorScheme = useColorScheme();
   const themed = Colors[colorScheme] ?? Colors.light;
 
@@ -194,7 +194,6 @@ const RideLayout = ({ children, snapPoints, index  }) => {
       typeof userDestination?.lat !== "number" ||
       typeof userDestination?.lon !== "number"
     ) {
-      setLoading(false);
       return;
     }
 
@@ -226,6 +225,7 @@ const RideLayout = ({ children, snapPoints, index  }) => {
       }));
 
       setRouteCoords(convertCoord);
+
     } catch (error) {
       if (isMounted) {
       }
@@ -241,6 +241,11 @@ const RideLayout = ({ children, snapPoints, index  }) => {
 
     return () => clearTimeout(timeout);
   }, [userDestination, pickUpAt]);
+
+  const closeBottomSheet = () => {
+    bottomSheetRef.current?.close();
+    if (onClose) onClose();
+  };
 
 
 

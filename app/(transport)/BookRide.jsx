@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Image, StyleSheet, Text, useColorScheme, View } from 'react-native'
+import { Image, StyleSheet, Text, useColorScheme, View, Modal, TouchableOpacity } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { router } from 'expo-router'
 
@@ -12,12 +12,15 @@ import Spacer from '../../components/Spacer'
 import ThemedCard from "../../components/ThemedCard"
 import { Colors } from '../../constant/Colors'
 import icons from '../../constant/icons'
+import ThanksForBookingModal from '../../components/ThanksForBookingModal'
 
 // State Management
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { selectedDriverAtom } from '../../atoms/selectedDriverAtoms'
 import { destinationAtom } from '../../atoms/destinationAtoms'
 import { userPickUpLocation } from '../../atoms/locationAtoms'
+import { userTripsAtom } from '../../atoms/tripsAtoms'
+import { bookingAtom } from '../../atoms/bookingAtoms';
 
 //API KEY
 import { EXPO_PUBLIC_GEOAPIFY_API_KEY } from '@env';
@@ -26,7 +29,7 @@ import { EXPO_PUBLIC_GEOAPIFY_API_KEY } from '@env';
 import { reverseGeocode } from '../../lib/map'
 
 
-const BookRide = () => {
+const BookRide = ({closeBottomSheet }) => {
 
   const colorScheme = useColorScheme()
   const themed = Colors[colorScheme] ?? Colors.light
@@ -34,9 +37,14 @@ const BookRide = () => {
   const yourDriver = useAtomValue(selectedDriverAtom)
   const destination = useAtomValue(destinationAtom)
   const PickupLocation = useAtomValue(userPickUpLocation)
+  const tripDetails = useAtomValue(userTripsAtom)
 
   const [coordToAddressText, setCoordToAddressText] = useState()
   const [loading, setLoading] = useState(false)
+  const [showThankYouModal, setShowThankYouModal] = useState(false);
+
+
+  const setBooking = useSetAtom(bookingAtom)
 
 
   const apiKey = EXPO_PUBLIC_GEOAPIFY_API_KEY;
@@ -59,14 +67,68 @@ const BookRide = () => {
     getCoordinates()
   }, [destination])
 
-  const handleRideBooking = async() => {
-    setLoading(true)
-    
-    if(yourDriver && PickupLocation && destination) {
+  const handleRideBooking = async () => {
+    setLoading(true);
 
+    if (yourDriver && PickupLocation && destination) {
+      const booking = {
+        driver: yourDriver,
+        pickup: PickupLocation,
+        destination,
+        price: tripDetails.price,
+        eta: tripDetails.eta,
+        status: "booked",
+        timestamp: Date.now(),
+      };
+
+      // 1. Save locally
+      setBooking(booking);
+
+      setShowThankYouModal(true);
+
+      // 2. Send to backend
+      // try {
+      //   const response = await fetch('https://your-backend-api.com/api/bookings', {
+      //     method: 'POST',
+      //     headers: {
+      //       'Content-Type': 'application/json',
+      //     },
+      //     body: JSON.stringify(booking),
+      //   });
+
+      //   if (!response.ok) {
+      //     throw new Error('Failed to save booking on server');
+      //   }
+
+      //   const result = await response.json();
+      //   console.log('Booking saved on server:', result);
+
+      //   // Optional: update booking with server response if needed
+
+      // } catch (error) {
+      //   console.error(error);
+      //   alert('Failed to save booking on server. Please try again later.');
+      //   // Optionally revert local booking or mark it as "pending sync"
+      // }
+
+
+
+      
+      // After 2 seconds, navigate and close modal
+
+      setTimeout(() => {
+        setShowThankYouModal(false);
+        closeBottomSheet?.();
+        router.replace("(transport)/RideTracker");
+      }, 2000);
+
+
+    } else {
+      alert('Please select a driver and locations.');
     }
 
-  }
+    setLoading(false);
+  };
 
 
 
@@ -124,7 +186,7 @@ const BookRide = () => {
                   </ThemedCard>
                   <ThemedCard style={{width: "100%", justifyContent:"center", alignItems:"center", flexDirection:"row", columnGap:10}}>
                       <Image source={icons.dollarsign} style={{ width: 25, height: 25, marginLeft: 5, padding: 1,  tintColor: themed.tabIconColor, backgroundColor:"yellow", borderRadius:10  }} />
-                      <ThemedText>Price: $ {yourDriver.driverCar.price.toFixed(2)}</ThemedText>
+                      <ThemedText>Price: $ {tripDetails.price}</ThemedText>
                   </ThemedCard>
                 </ThemedView>
 
@@ -160,6 +222,10 @@ const BookRide = () => {
           </View>
         )}
       </View>
+
+      {showThankYouModal && (
+        <ThanksForBookingModal />
+      )}
     </RideLayout>
   )
 }

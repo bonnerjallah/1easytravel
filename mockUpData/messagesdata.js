@@ -133,6 +133,7 @@ export const driversDetails = [
     longitude: -10.807472,
     driverCar: {
       image:images.truck, 
+      cartype: "SEDAN",
       price: 4.50
     }
   },
@@ -145,10 +146,11 @@ export const driversDetails = [
     role: "Driver",
     phone: "+231776000000",
     rating: "3.80",
-    latitude: 6.317211,
-    longitude: -10.806825,
+    latitude: 6.249000,
+    longitude: -10.348621,
     driverCar: {
       image: images.daco,
+      cartype: "SUV",
       price: 5.00,
     }
   },
@@ -164,6 +166,7 @@ export const driversDetails = [
     longitude:-10.805817,
     driverCar: {
       image: images.top,
+      cartype: "SEDAN",
       price: 3.75
     }
   },
@@ -179,7 +182,7 @@ export const driversDetails = [
   longitude: -10.808136,
   driverCar: {
     image:images.top, 
-    price: 4.25
+    cartype: "SUV",
   }
 },
 {
@@ -190,11 +193,12 @@ export const driversDetails = [
   location: "Nimba County, Liberia",
   role: "Driver",
   rating: "4.92",
-  latitude:6.292978,
-  longitude:-10.772108,
+  latitude:6.264532,
+  longitude:-10.703967,
   driverCar: {
     image:images.truck, 
-    price: 5.50}
+    cartype: "SUV",
+  }
 },
 {
   driver_id: 6,
@@ -208,7 +212,8 @@ export const driversDetails = [
   longitude:-10.769834,
   driverCar: {
     image:images.daco, 
-    price: 4.80}
+    cartype: "SUV",
+  }
 }
 
 ];
