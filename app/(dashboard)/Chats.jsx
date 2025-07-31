@@ -103,9 +103,9 @@ const Chats = () => {
               </View>
 
               <View style={{justifyContent: "center", width:"20%", alignItems:"flex-end", paddingRight: 2}}>
-                <ThemedText>{item.time}</ThemedText>
+                <ThemedText >{item.time}</ThemedText>
                   <View style={styles.messageAmount}>
-                    <ThemedText style={{fontWeight: "bold"}}>{item.messages.length}</ThemedText>
+                    <ThemedText style={{fontWeight: "bold", }}>{item.messages.length}</ThemedText>
                   </View>
               </View>
             </View>
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
   },
   activeText: {
     fontWeight: 'bold',
-    backgroundColor: "#adb5bd",
+    backgroundColor: "#001f54",
     width: 85,
     height: 30,
     paddingVertical: 5,
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
     columnGap: 15
   },
   messageAmount:{
-    backgroundColor: "#adb5bd",
+    backgroundColor:"#001f54",
     width: 25,
     height: 25,
     justifyContent: "center",

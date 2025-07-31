@@ -18,7 +18,10 @@ const ThanksForBookingModal = ({ visible, onClose, closeBottomSheet }) => {
       <View style={styles.modalOverlay}>
         <View style={styles.modalContent}>
           <ThemedText variant="title" style={{ marginBottom: 20, textAlign: 'center' }}>
-            Thank you, your ride is booked!
+            Thank you, 
+          </ThemedText>
+          <ThemedText variant="title" style={{ marginBottom: 20, textAlign: 'center' }}>
+            your ride is booked!
           </ThemedText>
           <ThemedText style={{fontSize: 70}}>✅</ThemedText>
         </View>
@@ -32,7 +35,7 @@ export default ThanksForBookingModal;
 const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: 'rgba(0,0,0,0.7)',
     justifyContent: 'center',
     alignItems: 'center',
   },

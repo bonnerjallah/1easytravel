@@ -8,7 +8,7 @@ export const userMessage = [
     messages: [
       "Contrary to popular belief, Lorem Ipsum is not simply random text.",
       "It has roots in classical Latin literature.",
-      "There are many variations of passages of Lorem Ipsum available, but the majority have suffered       alteration in some form, by injected humour, or randomised words which don't look even slightly believable."
+      "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable."
     ]
   },
   {
@@ -134,7 +134,9 @@ export const driversDetails = [
     driverCar: {
       image:images.truck, 
       cartype: "SEDAN",
-      price: 4.50
+      price: 4.50,
+      carDiscrip: "Black Toyota",
+      tag: "F12345"
     }
   },
   {
@@ -152,6 +154,8 @@ export const driversDetails = [
       image: images.daco,
       cartype: "SUV",
       price: 5.00,
+      carDiscrip: "Black Toyota",
+      tag: "E12345"
     }
   },
   {
@@ -167,7 +171,9 @@ export const driversDetails = [
     driverCar: {
       image: images.top,
       cartype: "SEDAN",
-      price: 3.75
+      price: 3.75,
+      carDiscrip: "black Honda",
+      tag: "D12345"
     }
   },
   {
@@ -183,6 +189,8 @@ export const driversDetails = [
   driverCar: {
     image:images.top, 
     cartype: "SUV",
+    carDiscrip: "black Lexus",
+    tag: "C12345"
   }
 },
 {
@@ -198,6 +206,8 @@ export const driversDetails = [
   driverCar: {
     image:images.truck, 
     cartype: "SUV",
+    carDiscrip: "black Toyota",
+    tag: "B12345"
   }
 },
 {
@@ -213,6 +223,8 @@ export const driversDetails = [
   driverCar: {
     image:images.daco, 
     cartype: "SUV",
+    carDiscrip: "black Toyota",
+    tag: "A12345"
   }
 }
 

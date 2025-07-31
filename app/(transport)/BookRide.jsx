@@ -21,6 +21,9 @@ import { destinationAtom } from '../../atoms/destinationAtoms'
 import { userPickUpLocation } from '../../atoms/locationAtoms'
 import { userTripsAtom } from '../../atoms/tripsAtoms'
 import { bookingAtom } from '../../atoms/bookingAtoms';
+import { activeRideAtom } from '../../atoms/ActiveRide';
+
+
 
 //API KEY
 import { EXPO_PUBLIC_GEOAPIFY_API_KEY } from '@env';
@@ -29,7 +32,7 @@ import { EXPO_PUBLIC_GEOAPIFY_API_KEY } from '@env';
 import { reverseGeocode } from '../../lib/map'
 
 
-const BookRide = ({closeBottomSheet }) => {
+const BookRide = () => {
 
   const colorScheme = useColorScheme()
   const themed = Colors[colorScheme] ?? Colors.light
@@ -38,18 +41,21 @@ const BookRide = ({closeBottomSheet }) => {
   const destination = useAtomValue(destinationAtom)
   const PickupLocation = useAtomValue(userPickUpLocation)
   const tripDetails = useAtomValue(userTripsAtom)
+  const SetActiveRide = useSetAtom(activeRideAtom)
+  const setBooking = useSetAtom(bookingAtom)
+
+
 
   const [coordToAddressText, setCoordToAddressText] = useState()
   const [loading, setLoading] = useState(false)
   const [showThankYouModal, setShowThankYouModal] = useState(false);
 
 
-  const setBooking = useSetAtom(bookingAtom)
 
 
   const apiKey = EXPO_PUBLIC_GEOAPIFY_API_KEY;
 
-  //Reverse to get coordinates
+  //Reverse to get address
   useEffect(() => {
     const getCoordinates = async () => {
       if(destination.lat && destination.lon) {
@@ -86,6 +92,9 @@ const BookRide = ({closeBottomSheet }) => {
 
       setShowThankYouModal(true);
 
+      SetActiveRide(true)
+
+
       // 2. Send to backend
       // try {
       //   const response = await fetch('https://your-backend-api.com/api/bookings', {
@@ -118,7 +127,6 @@ const BookRide = ({closeBottomSheet }) => {
 
       setTimeout(() => {
         setShowThankYouModal(false);
-        closeBottomSheet?.();
         router.replace("(transport)/RideTracker");
       }, 2000);
 

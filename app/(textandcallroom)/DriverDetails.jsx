@@ -21,7 +21,6 @@ import { selectedMessageAtom } from '../../atoms/messageAtoms';
 import {driversDetails} from "../../mockUpData/messagesdata"
 
 
-
 const DriverDetails = () => {
   const DriverData = useAtomValue(selectedMessageAtom);
   const [driver, setDriver] = useState(null);

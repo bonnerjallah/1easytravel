@@ -18,6 +18,7 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import { userLocationAtom, userPickUpCoord } from '../atoms/locationAtoms';
 import { driversDetails } from '../mockUpData/messagesdata';
 import { destinationAtom } from '../atoms/destinationAtoms';
+import { activeRideAtom } from '../atoms/ActiveRide';
 
 // API KEY
 import { EXPO_PUBLIC_GEOAPIFY_API_KEY } from '@env';
@@ -42,6 +43,7 @@ const RideLayout = ({ children, snapPoints, index, onClose  }) => {
   const userDestination = useAtomValue(destinationAtom);
   const setDestination = useSetAtom(destinationAtom);
   const pickUpAt = useAtomValue(userPickUpCoord)
+  const activeRide = useAtomValue(activeRideAtom)
 
   const apiKey = EXPO_PUBLIC_GEOAPIFY_API_KEY
 
@@ -70,6 +72,7 @@ const RideLayout = ({ children, snapPoints, index, onClose  }) => {
 
   
 
+  //Businesses label
   const categoriesArray = [
     "catering.restaurant",
     "commercial.supermarket",
@@ -105,7 +108,6 @@ const RideLayout = ({ children, snapPoints, index, onClose  }) => {
         return <Ionicons name="location" size={20} color={themed.text} />;
     }
   };
-
 
   //Get nearby bussiness
   const getNearbyPlaces = async (lat, lon, cat = category) => {
@@ -242,10 +244,10 @@ const RideLayout = ({ children, snapPoints, index, onClose  }) => {
     return () => clearTimeout(timeout);
   }, [userDestination, pickUpAt]);
 
-  const closeBottomSheet = () => {
-    bottomSheetRef.current?.close();
-    if (onClose) onClose();
-  };
+  // const closeBottomSheet = () => {
+  //   bottomSheetRef.current?.close();
+  //   if (onClose) onClose();
+  // };
 
 
 
@@ -253,9 +255,15 @@ const RideLayout = ({ children, snapPoints, index, onClose  }) => {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemedView style={styles.container} safe={true}>
-        <View style={{ zIndex: 2 }}>
-          <BackButton style={styles.backBttn} size={40} />
-        </View>
+
+        {!activeRide ? (
+          <View style={{ zIndex: 2 }}>
+            <BackButton style={styles.backBttn} size={40} />
+          </View>
+        ) : (
+          <></>
+        )}
+        
 
 
         <View style={StyleSheet.absoluteFillObject}>

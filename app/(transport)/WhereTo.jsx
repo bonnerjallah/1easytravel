@@ -1,4 +1,5 @@
 import { Text, StyleSheet, useColorScheme, Image, View, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Platform } from 'react-native';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { useState, useEffect } from 'react';
 import { router } from 'expo-router';
 
@@ -14,12 +15,13 @@ import ThemedTextInput from '../../components/ThemedTextInput';
 //STATE MANAGEMENT
 import { useAtomValue, useSetAtom } from 'jotai';
 import { userLocationAtom, userPickUpLocation, userPickUpCoord } from '../../atoms/locationAtoms';
-import { destinationAtom } from '../../atoms/destinationAtoms';
+import { destinationAtom, destinationText } from '../../atoms/destinationAtoms';
 
 
 
 //API KEY
 import { EXPO_PUBLIC_GEOAPIFY_API_KEY } from '@env';
+import {GOOGLEMAP_API_KEY} from "@env"
 
 //MOCK DATA
 import { trips } from '../../mockUpData/messagesdata';
@@ -27,6 +29,7 @@ import { trips } from '../../mockUpData/messagesdata';
 //LIB
 import { reverseGeocode } from '../../lib/map';
 import {addressToCoord} from "../../lib/map"
+import {getDistanceInMiles} from "../../lib/map"
 
 
 
@@ -36,25 +39,47 @@ const WhereTo = () => {
   const setUserDestination = useSetAtom(destinationAtom)
   const setPickUpLocation = useSetAtom(userPickUpLocation);
 
+  const setPickUpCoord = useSetAtom(userPickUpCoord)
+  const setDestinationText = useSetAtom(destinationText)
   const userLocation = useAtomValue(userLocationAtom)
   const pickUpLocation = useAtomValue(userPickUpLocation);
-  const setPickUpCoord = useSetAtom(userPickUpCoord)
+  const pickUpDestination = useAtomValue(destinationAtom)
   const pickUpCoord = useAtomValue(userPickUpCoord) 
   
   const [destination, setDestination] = useState('');
   const [loading, setLoading] = useState(false)
   const [pickUpText, setPickUpText] = useState(""); 
+  const [destinationLocationAddress, setDestinationLocationAddress] = useState()
   
 
   const apikey = EXPO_PUBLIC_GEOAPIFY_API_KEY;
+  const googleApiKey = GOOGLEMAP_API_KEY
 
   const colorScheme = useColorScheme();
   const themed = Colors[colorScheme] ?? Colors.light;
 
   const userRecentTrips = trips.slice(0, 3);
+  
 
+  //Reverse address coords to text
+  useEffect(() => {
+    const getDestinationAddress = async () => {
+      if(pickUpDestination.lat && pickUpDestination.lon) {
+        const pickUpAddress = await reverseGeocode(
+          pickUpDestination.lat,
+          pickUpDestination.lon,
+          apikey
+        )
+        if(pickUpAddress) {
+          setDestinationLocationAddress(pickUpAddress)
+          setDestinationText(pickUpAddress)
+        }
+      }
+    }  
+      getDestinationAddress()
+  }, [pickUpDestination])
 
-  // Reverse to get address
+  // Reverse address coords to text
   useEffect(() => {
     const getAddress = async () => {
       if (userLocation.latitude && userLocation.longitude) {
@@ -72,6 +97,7 @@ const WhereTo = () => {
     getAddress();
   }, [userLocation]);
 
+  //Reverse address text to coords
   useEffect(() => {
     const fetchCoordinates = async () => {
       try {
@@ -90,24 +116,6 @@ const WhereTo = () => {
   }, [pickUpLocation]);
     
   
-  // Helper to calculate miles between two points
-  const getDistanceInMiles = (lat1, lon1, lat2, lon2) => {
-    const toRad = (value) => (value * Math.PI) / 180;
-    const R = 3958.8; // Radius of Earth in miles
-
-    const dLat = toRad(lat2 - lat1);
-    const dLon = toRad(lon2 - lon1);
-
-    const a =
-      Math.sin(dLat / 2) ** 2 +
-      Math.cos(toRad(lat1)) *
-      Math.cos(toRad(lat2)) *
-      Math.sin(dLon / 2) ** 2;
-
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-    return (R * c).toFixed(2);
-  };
 
   // Static map URL for recent trips
   const lat = '6.312552';
@@ -117,11 +125,13 @@ const WhereTo = () => {
 
   
   // Handle destination confirmation
-  const handleDestinatoinConfirm = () => {
-      if (!destination.trim()) return;
+  const handleDestinationConfirm = () => {
+      if (!destination.trim() && !destinationLocationAddress) return;
+
+      const selectedAddress = destination.trim() === "" ? destinationLocationAddress : destination
 
       setLoading(true);
-      addressToCoord(destination, apikey)
+      addressToCoord(selectedAddress, apikey)
         .then((coords) => {
           setLoading(false);
 
@@ -185,7 +195,7 @@ const WhereTo = () => {
                     }}
                   />
                   <ThemedTextInput 
-                    placeholder="Where to?"
+                    placeholder={destinationLocationAddress ? destinationLocationAddress : "Where to?"}
                     returnKeyType="done"
                     blurOnSubmit={true}
                     value={destination}
@@ -210,6 +220,12 @@ const WhereTo = () => {
                       backgroundColor: themed.inputBackground                  
                     }}
                   />
+
+
+
+                    
+
+
                 </View>
               </View>
               <ThemedText style={{ marginVertical: 10 }} variant='title' title >
@@ -254,7 +270,7 @@ const WhereTo = () => {
 
                 <Spacer width={10}/>
 
-              <ThemedButton onPress={handleDestinatoinConfirm}>
+              <ThemedButton onPress={handleDestinationConfirm}>
                 <ThemedText variant="title" style={{ textAlign: 'center', color: themed.buttontitle }}>
                   Confirm destination
                 </ThemedText>
